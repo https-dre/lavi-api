@@ -23,6 +23,20 @@ export class OrderRepository implements IOrderRepository {
     await db.delete(t.order).where(eq(t.order.id, orderId));
   }
 
+  async findByLaundryId(
+    laundryId: string,
+    page: number = 1,
+    pageSize: number = 10,
+  ): Promise<OrderModel[]> {
+    const result = await db
+      .select()
+      .from(t.order)
+      .where(eq(t.order.laundryId, laundryId))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize);
+    return result;
+  }
+
   async findById(id: string): Promise<OrderModel> {
     const result = await db.select().from(t.order).where(eq(t.order.id, id));
     return result[0];

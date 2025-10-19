@@ -26,6 +26,22 @@ export class OrderService {
     return orderCreated;
   }
 
+  async findByLaundryId(
+    laundryId: string,
+    page: number,
+    pageSize: number,
+  ): Promise<OrderDTO[]> {
+    if (!(await this.laundryRepository.findById(laundryId)))
+      throw new BadResponse("Lavanderia não encontrada", 404);
+
+    const orders = await this.repository.findByLaundryId(
+      laundryId,
+      page,
+      pageSize,
+    );
+    return orders;
+  }
+
   async deleteOrder(orderId: string) {
     await this.repository.deleteAllItemsFromOrder(orderId);
     await this.repository.delete(orderId);

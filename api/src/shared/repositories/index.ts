@@ -90,6 +90,11 @@ export interface IOrderRepository {
     orderId: string,
     fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
   ): Promise<void>;
+  findByLaundryId(
+    laundryId: string,
+    page?: number,
+    pageSize?: number,
+  ): Promise<OrderModel[]>;
 }
 
 export interface ICatalogItemRepository {
