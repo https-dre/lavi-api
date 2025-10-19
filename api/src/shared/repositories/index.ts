@@ -29,7 +29,7 @@ export interface ILaundryRepository {
   findByCNPJ(cnpj: string): Promise<LaundryModel>;
   findById(id: string): Promise<LaundryModel>;
   findByEmployeeCode(code: string): Promise<LaundryModel>;
-  findByOwnerId(id: string): Promise<LaundryModel[]>;
+  findByMemberId(id: string): Promise<LaundryModel[]>;
   update(id: string, fields: Record<string, any>): Promise<void>;
   searchByName(name: string): Promise<LaundryModel[]>;
   listAll(): Promise<LaundryModel[]>;
@@ -106,10 +106,20 @@ export interface ICatalogItemRepository {
 export interface IFeedbackRepository {
   save(data: Omit<FeedbackModel, "id" | "created_at">): Promise<FeedbackModel>;
   deleteById(id: string): Promise<void>;
-  saveImages(images: Omit<FeedbackImageModel, "id">[]): Promise<FeedbackImageModel[]>;
+  saveImages(
+    images: Omit<FeedbackImageModel, "id">[],
+  ): Promise<FeedbackImageModel[]>;
   deleteImage(key: string): Promise<void>;
   findWithInnerJoin(laundryId: string): Promise<any>;
-  findByLaundryId(laundryId: string, page: number, pageSize: number): Promise<any>;
-  findByCustomerId(customerId: string, page: number, pageSize: number): Promise<FeedbackModel[]>;
+  findByLaundryId(
+    laundryId: string,
+    page: number,
+    pageSize: number,
+  ): Promise<any>;
+  findByCustomerId(
+    customerId: string,
+    page: number,
+    pageSize: number,
+  ): Promise<FeedbackModel[]>;
   findById(id: string): Promise<FeedbackModel>;
 }

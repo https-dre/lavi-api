@@ -81,6 +81,14 @@ export class LaundryService {
     return remove_sensitive_fields(this.decryptLaundry(laundryFound));
   }
 
+  async findByMemberId(memberId: string): Promise<LaundryDTO[]> {
+    if (!(await this.memberRepository.findById(memberId)))
+      throw new BadResponse("Membro de lavanderia não encontrado", 404);
+
+    const laundries = await this.repository.findByMemberId(memberId);
+    return laundries.map((l) => this.decryptLaundry(l));
+  }
+
   decryptLaundry(l: LaundryModel): LaundryDTO {
     const decrypted_laundry = this.crypto.decryptEntity(l, sensitive_fields);
     return this.adaptModel(decrypted_laundry);

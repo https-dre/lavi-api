@@ -1,9 +1,9 @@
 import { ILaundryRepository } from "../shared/repositories";
 import { db } from "../database/conn";
 import { LaundryModel } from "../shared/models";
-import t from "../database/tables";
+import * as t from "../database/tables";
 import { randomUUID } from "crypto";
-import { eq, ilike } from "drizzle-orm";
+import { eq, getTableColumns, ilike } from "drizzle-orm";
 
 export class LaundryRepository implements ILaundryRepository {
   async save(data: Omit<LaundryModel, "id">): Promise<LaundryModel> {
@@ -45,11 +45,12 @@ export class LaundryRepository implements ILaundryRepository {
     return result[0];
   }
 
-  async findByOwnerId(id: string): Promise<LaundryModel[]> {
+  async findByMemberId(memberId: string): Promise<LaundryModel[]> {
     const result = await db
-      .select()
+      .selectDistinct(getTableColumns(t.laundry))
       .from(t.laundry)
-      .where(eq(t.laundry.ownerId, id));
+      .innerJoin(t.laundry_member, eq(t.laundry_member.laundryId, t.laundry.id))
+      .where(eq(t.laundry_member.memberId, memberId));
     return result;
   }
 
