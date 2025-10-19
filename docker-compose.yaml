@@ -4,8 +4,8 @@ services:
       context: ./api
     env_file: ./api/.env.production
     ports:
-      - "${API_PORT}:${API_PORT}"
-  realtime_api:
+      - "${PORT}:${PORT}"
+  realtime:
     build:
       context: ./realtime
     env_file: ./realtime/.env.production
