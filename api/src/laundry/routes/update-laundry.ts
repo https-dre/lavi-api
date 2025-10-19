@@ -3,7 +3,7 @@ import { LaundryService } from "../laundry-service";
 import { LaundryType } from "../../shared/dto/typebox";
 
 export const updateLaundry = (service: LaundryService): Elysia => {
-  return new Elysia().put(
+  return new Elysia().patch(
     "/laundries/:id",
     async ({ params, body, status }) => {
       const { id } = params;
