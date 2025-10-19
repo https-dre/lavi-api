@@ -1,6 +1,7 @@
 import type { ServerWebSocket } from "elysia/ws/bun";
 import Elysia, { type TSchema } from "elysia";
 import type { TypeCheck } from "elysia/type-system";
+import { logger } from "./logger";
 
 const app = new Elysia();
 
@@ -20,7 +21,7 @@ function parseJsonToBuffer(data: object): Buffer {
 }
 
 function parseBufferToJson(arrayBuffer: any) {
-  const decoder = new TextDecoder('utf-8');
+  const decoder = new TextDecoder("utf-8");
   const jsonString = decoder.decode(arrayBuffer);
   const obj = JSON.parse(jsonString);
   return obj;
@@ -31,25 +32,24 @@ function addHandler(event: string, callback: (data: object) => void) {
 }
 
 type SocketMessage = {
-  event: string,
-  body: any
-}
+  event: string;
+  body: any;
+};
 
 app.ws("/ws", {
   open(client) {
     socketsConnected.set(client.id, client.raw);
     client.send(
-      parseJsonToBuffer({ event: "message", body: { message: "Hello World" } })
+      parseJsonToBuffer({ event: "message", body: { message: "Hello World" } }),
     );
+    logger.info(`New socket connected: ${client.id}`);
   },
-  message(ws, { message }) {
-    const data: SocketMessage = parseBufferToJson(message);
-    console.log(data)
-
+  async message(ws, body) {
+    logger.info(`${ws.id} => ${(body as any).event}`);
   },
   close(client) {
-    socketsConnected.delete(client.id)
-  }
+    socketsConnected.delete(client.id);
+  },
 });
 
 /* setInterval(() => {
