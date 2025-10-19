@@ -20,7 +20,9 @@ export const updateLaundry = (service: LaundryService): Elysia => {
         id: t.String({ format: "uuid" }),
       }),
       body: t.Object({
-        fields: t.Partial(t.Omit(LaundryType, ["id", "created_at", "ownerId"])),
+        fields: t.Partial(
+          t.Omit(LaundryType, ["id", "created_at", "putEmployeeCode"]),
+        ),
       }),
     },
   );

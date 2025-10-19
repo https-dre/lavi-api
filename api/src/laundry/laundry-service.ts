@@ -1,6 +1,5 @@
 import { LaundryDTO } from "../shared/dto";
 import { BadResponse } from "@/http/error-handler";
-import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fields";
 import { LaundryModel } from "../shared/models";
 import {
   CryptoProvider,
@@ -11,7 +10,7 @@ import { LaundryType } from "../shared/dto/typebox";
 import _ from "lodash";
 import { generateSlug } from "../shared/functions/generate-slug";
 
-const sensitive_fields = [
+const Laundry_SensitiveFields = [
   "account_number",
   "cnpj",
   "account_type",
@@ -19,6 +18,11 @@ const sensitive_fields = [
   "bank_number",
   "bank_agency",
 ];
+
+type LaundryUpdate_Fields = Omit<
+  LaundryDTO,
+  "id" | "created_at" | "putEmployeeCode"
+>;
 
 export class LaundryService {
   private jwt: JwtProvider;
@@ -35,7 +39,7 @@ export class LaundryService {
     ownerId: string,
     laundry: Omit<LaundryDTO, "id" | "created_at" | "putEmployeeCode">,
   ) {
-    const cnpj_index = this.crypto.sha256(laundry.cnpj!);
+    const cnpj_index = this.crypto.hmac(laundry.cnpj!);
     const laundryFounded = await this.repository.findByCNPJ(cnpj_index);
     if (laundryFounded) {
       throw new BadResponse("Este CNPJ já foi registrado.");
@@ -78,7 +82,7 @@ export class LaundryService {
 
     if (!laundryFound) throw new BadResponse("Lavanderia não encontrada.", 404);
 
-    return remove_sensitive_fields(this.decryptLaundry(laundryFound));
+    return this.decryptLaundry(laundryFound);
   }
 
   async findByMemberId(memberId: string): Promise<LaundryDTO[]> {
@@ -90,62 +94,47 @@ export class LaundryService {
   }
 
   decryptLaundry(l: LaundryModel): LaundryDTO {
-    const decrypted_laundry = this.crypto.decryptEntity(l, sensitive_fields);
+    const decrypted_laundry = this.crypto.decryptEntity(
+      l,
+      Laundry_SensitiveFields,
+    );
     return this.adaptModel(decrypted_laundry);
-  }
-
-  private async checkJwt(token: string) {
-    const payload = this.jwt.verifyToken(token) as {
-      email: string;
-      role: string;
-    };
-    return payload;
-  }
-
-  async verifyTokenAndValidateOwner(header: string) {
-    if (!header.startsWith("Bearer "))
-      throw new BadResponse({
-        details: "Sessão inválida",
-        err: "Invalid 'Authorization' header",
-      });
-    const token = header.split(" ")[1];
-    const jwtPayload = await this.checkJwt(token);
-    return {
-      token,
-      jwtPayload,
-    };
   }
 
   async updateLaundryFields(
     laundryId: string,
-    updatedFields: Record<string, any>,
+    updatedFields: Partial<LaundryUpdate_Fields>,
   ) {
-    const laundryWithId = await this.repository.findById(laundryId);
-    if (!laundryId) throw new BadResponse("Lavanderia não encontrado", 404);
-    const decryptedLaundry = this.crypto.decryptEntity(
-      laundryWithId,
-      sensitive_fields,
-    );
-    const updated_laundry = { ...decryptedLaundry, ...updatedFields } as Record<
-      string,
-      any
+    const laundryExists = await this.repository.findById(laundryId);
+    if (!laundryExists) {
+      throw new BadResponse("Lavanderia não encontrada", 404);
+    }
+
+    const updatePayload: Record<string, any> = {};
+    const keys = Object.keys(updatedFields) as Array<
+      keyof LaundryUpdate_Fields
     >;
-    const encrypted_fields = {} as Record<string, any>;
-    for (const field of sensitive_fields) {
-      if (updated_laundry[field]) {
-        encrypted_fields[field] = this.crypto.encrypt(updated_laundry[field]);
+    for (const key of keys) {
+      const value = updatedFields[key];
+
+      // 3. Verificar se o campo é sensível
+      if (Laundry_SensitiveFields.includes(key)) {
+        updatePayload[key] = value ? this.crypto.encrypt(value) : value;
+
+        // Caso especial para o CNPJ
+        if (key === "cnpj") {
+          updatePayload["cnpj_blind_index"] = value
+            ? this.crypto.hmac(value) // Usar o mesmo método do 'save'
+            : null;
+        }
+      } else {
+        updatePayload[key] = value;
       }
     }
-    let cnpj_blind_index = updated_laundry.cnpj_blind_index;
-    if (updatedFields.cnpj) {
-      cnpj_blind_index = this.crypto.hmac(updatedFields.cnpj);
+    if (Object.keys(updatePayload).length === 0) {
+      return;
     }
-    const updatedRecord = {
-      ...updated_laundry,
-      ...encrypted_fields,
-      cnpj_blind_index,
-    };
-    await this.repository.update(laundryId, updatedRecord);
+    await this.repository.update(laundryId, updatePayload);
   }
 
   async searchByName(name?: string) {
