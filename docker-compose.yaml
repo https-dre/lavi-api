@@ -1,4 +1,19 @@
 services:
+  database:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=laundry_api
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - lavi_data:/var/lib/postgresql/data
   api:
     build:
       context: ./api
@@ -11,3 +26,6 @@ services:
     env_file: ./realtime/.env.production
     ports:
       - "${WS_PORT}:${WS_PORT}"
+
+volumes:
+  lavi_data:
