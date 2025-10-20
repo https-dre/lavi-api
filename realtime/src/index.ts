@@ -59,5 +59,6 @@ app.ws("/ws", {
   console.log(`Clients connected: `, socketsConnected.size)
 }) */
 
-console.log("Running Web Socket");
-app.listen(3000);
+const PORT = Bun.env.PORT ? Bun.env.PORT : "3300"
+logger.info(`Realtime API Running at ws://localhost:${PORT}`)
+app.listen(Number(PORT));
