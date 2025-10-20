@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
 import { CustomerService } from "../customer-service";
 
-export const deleteCustomer = (service: CustomerService): Elysia => {
+export const deleteCustomer = (service: CustomerService) => {
   return new Elysia().delete(
     "/customer/:id",
     async ({ params, status }) => {

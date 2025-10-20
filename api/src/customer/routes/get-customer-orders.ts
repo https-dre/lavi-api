@@ -6,7 +6,7 @@ import { OrderType } from "../../shared/dto/typebox";
 export const getCustomerOrders = (
   customerService: CustomerService,
   orderService: OrderService,
-): Elysia => {
+) => {
   return new Elysia().get(
     "/customers/:id/orders",
     async ({ params, status }) => {

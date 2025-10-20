@@ -3,7 +3,7 @@ import { CustomerService } from "../customer-service";
 import { CustomerType } from "../../shared/dto/typebox";
 import { CustomerDTO } from "../../shared/dto";
 
-export const postCustomer = (service: CustomerService): Elysia => {
+export const postCustomer = (service: CustomerService) => {
   return new Elysia().post(
     "/customer",
     async ({ body, status }) => {

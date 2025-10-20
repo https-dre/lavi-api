@@ -2,7 +2,7 @@ import Elysia, { t } from "elysia";
 import { CustomerService } from "../customer-service";
 import { CustomerType } from "../../shared/dto/typebox";
 
-export const getCustomer = (service: CustomerService): Elysia => {
+export const getCustomer = (service: CustomerService) => {
   return new Elysia().get(
     "/customer/:id",
     async ({ params, status }) => {

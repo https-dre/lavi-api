@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
 import { CustomerService } from "../customer-service";
 
-export const authenticateCustomer = (service: CustomerService): Elysia => {
+export const authenticateCustomer = (service: CustomerService) => {
   return new Elysia().put(
     "/customer/sign",
     async ({ body, status }) => {
