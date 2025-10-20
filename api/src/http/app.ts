@@ -7,8 +7,9 @@ import { customerController } from "../customer/routes";
 import { laundryController } from "../laundry/routes";
 import { orderController } from "@/order/routes";
 import { catalogController } from "@/catalog-item/routes";
+import { treaty } from "@elysiajs/eden";
 
-const App = new Elysia()
+export const App = new Elysia()
   .use(
     openapi({
       documentation: {
@@ -20,7 +21,7 @@ const App = new Elysia()
       scalar: {
         url: "/openapi/json",
       },
-    })
+    }),
   )
   .error({
     BadResponse,
@@ -37,17 +38,11 @@ const App = new Elysia()
           error,
         });
     }
-  });
-
-// Configura as rotas
-App.get("/", ({ redirect }) => redirect("/openapi"));
-App.get("ping", () => "Hello World!")
-App.use(memberController);
-App.use(customerController);
-App.use(laundryController);
-App.use(catalogController);
-App.use(orderController);
-
-type App_t = typeof App;
-
-export { App, App_t }
+  })
+  .get("/", ({ redirect }) => redirect("/openapi"))
+  .get("/ping", () => "Hello World!")
+  .use(memberController)
+  .use(customerController)
+  .use(laundryController)
+  .use(catalogController)
+  .use(orderController);
