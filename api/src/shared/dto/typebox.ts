@@ -19,6 +19,7 @@ const DateString = Type.String({
 export const CustomerType = Type.Object({
   id: Type.String(),
   profile_url: Type.Union([Type.String(), Type.Null()]),
+  address: Type.String(),
   name: Type.String(),
   email: Type.String(),
   is_pj: Type.Boolean(),

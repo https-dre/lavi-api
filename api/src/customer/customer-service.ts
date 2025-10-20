@@ -46,6 +46,7 @@ export class CustomerService {
     const encrypted_customer = {
       ...customer,
       email_blind_index: email_index,
+      address: this.crypto.encrypt(customer.address),
       email: this.crypto.encrypt(customer.email),
       doc_blind_index: doc_index,
       doc: this.crypto.encrypt(customer.doc),
@@ -146,6 +147,7 @@ export class CustomerService {
       "email",
       "doc",
       "name",
+      "address"
     ]);
     return this.adaptModel(decrypted_customer);
   }

@@ -79,6 +79,7 @@ export const laundryCatalogItem = pgTable("laundryCatalogItems", {
 export const customer = pgTable("customers", {
   id: text().primaryKey(),
   profile_url: text(),
+  address: text().notNull().default("Null Address"),
   name: text().notNull(),
   email_blind_index: text().notNull().unique(),
   email: text().notNull(),
