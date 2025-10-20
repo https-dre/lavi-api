@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.864.0",
+    "@elysiajs/eden": "^1.4.4",
     "@elysiajs/openapi": "^1.4.2",
     "@sinclair/typebox": "^0.34.41",
     "bcryptjs": "^3.0.2",
