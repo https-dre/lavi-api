@@ -1,5 +1,12 @@
 import { treaty } from "@elysiajs/eden";
-import type { App_t } from "@/http/app";
+import { App } from "@/http/app";
+import { describe, it, expect } from "bun:test";
 
-const PORT = Bun.env.PORT ? Bun.env.PORT : "3000"
-const api = treaty<App_t>(`localhost:${PORT}`);
+const api = treaty(App);
+
+describe("API connection", () => {
+  it("should return 'Hello World!'", async () => {
+    const { data } = await api.ping.get();
+    expect(data).toBe("Hello World!");
+  });
+});
