@@ -99,20 +99,23 @@ export class CustomerService {
     const customerFounded = await this.repository.findById(id);
     if (!customerFounded) {
       throw new BadResponse("Cliente não encontrado.", 404);
-    }
+    } 
 
-    const update: Record<string, any> = {};
+    const updatePayload: Record<string, any> = {};
     for (const key of Object.keys(fields)) {
       if (["email", "doc"].includes(key)) {
-        update[`${key}_blind_index`] = this.crypto.hmac(fields[key]);
-        update[key] = this.crypto.encrypt(fields[key]);
+        updatePayload[`${key}_blind_index`] = this.crypto.hmac(fields[key]);
+        updatePayload[key] = this.crypto.encrypt(fields[key]);
         continue;
       }
-
-      update[key] = fields[key];
+      if(key == "address") {
+        updatePayload[key] = this.crypto.encrypt(fields[key])
+        continue;
+      }
+      updatePayload[key] = fields[key];
     }
 
-    await this.repository.update(update, id);
+    await this.repository.update(updatePayload, id);
     return id;
   }
 
