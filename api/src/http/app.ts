@@ -8,6 +8,7 @@ import { laundryController } from "../laundry/routes";
 import { orderController } from "@/order/routes";
 import { catalogController } from "@/catalog-item/routes";
 import { s3Api } from "./s3-api";
+import { feedbackController } from "@/feedback/routes";
 
 export const App = new Elysia()
   .use(
@@ -46,4 +47,5 @@ export const App = new Elysia()
   .use(laundryController)
   .use(catalogController)
   .use(orderController)
+  .use(feedbackController)
   .use(s3Api);

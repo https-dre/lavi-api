@@ -13,6 +13,8 @@ import { CatalogItemService } from "@/catalog-item/catalog-item.service";
 import { S3Provider } from "../providers/S3Provider";
 import { MediaService } from "@/media/media-service";
 import { LaundryBannerRepository } from "@/laundry/laundry-banner-repository";
+import { FeedbackService } from "@/feedback/feedback-service";
+import { FeedbackRepository } from "@/feedback/feedback-repository";
 
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
@@ -20,6 +22,7 @@ const laundryRepository = new LaundryRepository();
 const laundryBannerRepository = new LaundryBannerRepository();
 const memberRepository = new MemberRepository();
 const catalogRepository = new CatalogRepository();
+const feedbackRepository = new FeedbackRepository();
 
 const cryptoProvider = new CryptoProvider();
 const jwtProvider = new JwtProvider();
@@ -56,7 +59,8 @@ const appServices = {
   mediaService: new MediaService(objectStorage, {
     memberRepository, customerRepository,
     laundryRepository, laundryBanner: laundryBannerRepository
-  })
+  }),
+  feedbackService: new FeedbackService(feedbackRepository, laundryRepository, customerRepository)
 };
 
 export { appServices };
