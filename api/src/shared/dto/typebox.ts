@@ -49,6 +49,13 @@ export const LaundryType = Type.Object({
   created_at: Type.Union([DateISO, Type.Null()]),
 });
 
+export const LaundryBannerType = Type.Object({
+  id: Type.String({ format: "uuid" }),
+  resource: Type.String(),
+  resource_key: Type.String(),
+  laundryId: Type.String({ format: "uuid" })
+})
+
 export const OrderItemType = Type.Object({
   id: Type.String(),
   qntd: Type.Integer(),
@@ -94,7 +101,7 @@ export const CatalogItemType = Type.Object({
 });
 
 export const FeedbackType = Type.Object({
-  id: Type.String({ format: "uuid "}),
+  id: Type.String({ format: "uuid " }),
   content: Type.String(),
   title: Type.String(),
   rate: Type.Integer(),
@@ -107,5 +114,5 @@ export const FeedbackImageType = Type.Object({
   id: Type.String({ format: "uuid" }),
   url: Type.String({ format: "uri" }),
   objectId: Type.String(),
-  postId: Type.String({ format: "uuid"})
+  postId: Type.String({ format: "uuid" })
 })
