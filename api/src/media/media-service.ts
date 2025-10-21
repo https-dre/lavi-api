@@ -99,7 +99,7 @@ export class MediaService {
     arrayBuffer: ArrayBuffer,
     fileType: string,
   ) {
-    const laundry = await this.customerRepository.findById(laundryId);
+    const laundry = await this.laundryRepository.findById(laundryId);
     if (!laundry) {
       throw new BadResponse("Lavanderia não encontrada", 404);
     }
