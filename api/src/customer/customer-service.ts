@@ -12,6 +12,7 @@ import { remove_sensitive_fields } from "../shared/functions/remove-sensitive-fi
 import { CustomerType } from "../shared/dto/typebox";
 import _ from "lodash";
 import { TObject } from "@sinclair/typebox";
+import { S3Provider } from "@/shared/providers/S3Provider";
 
 export class CustomerService {
   constructor(
@@ -19,6 +20,7 @@ export class CustomerService {
     readonly crypto: CryptoProvider,
     readonly jwt: JwtProvider,
     readonly identityService: IdentityService,
+    private objectStorage: S3Provider,
   ) {}
 
   public validateFields(customer: Omit<CustomerDTO, "id" | "created_at">) {
@@ -99,7 +101,7 @@ export class CustomerService {
     const customerFounded = await this.repository.findById(id);
     if (!customerFounded) {
       throw new BadResponse("Cliente não encontrado.", 404);
-    } 
+    }
 
     const updatePayload: Record<string, any> = {};
     for (const key of Object.keys(fields)) {
@@ -108,8 +110,8 @@ export class CustomerService {
         updatePayload[key] = this.crypto.encrypt(fields[key]);
         continue;
       }
-      if(key == "address") {
-        updatePayload[key] = this.crypto.encrypt(fields[key])
+      if (key == "address") {
+        updatePayload[key] = this.crypto.encrypt(fields[key]);
         continue;
       }
       updatePayload[key] = fields[key];
@@ -150,7 +152,7 @@ export class CustomerService {
       "email",
       "doc",
       "name",
-      "address"
+      "address",
     ]);
     return this.adaptModel(decrypted_customer);
   }

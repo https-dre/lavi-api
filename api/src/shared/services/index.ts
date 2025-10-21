@@ -10,6 +10,7 @@ import { MemberRepository } from "@/member/member-repository";
 import { MemberService } from "@/member/member-service";
 import { CatalogRepository } from "@/catalog-item/catalog-item.repository";
 import { CatalogItemService } from "@/catalog-item/catalog-item.service";
+import { S3Provider } from "../providers/S3Provider";
 
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
@@ -25,6 +26,8 @@ const identityService = new IdentityService(
   memberRepository,
 );
 
+const objectStorage = new S3Provider(Bun.env.BUCKET_NAME!);
+
 const appServices = {
   identity: new IdentityService(customerRepository, memberRepository),
   customer: new CustomerService(
@@ -32,6 +35,7 @@ const appServices = {
     cryptoProvider,
     jwtProvider,
     identityService,
+    objectStorage,
   ),
   order: new OrderService(
     orderRepository,
