@@ -40,10 +40,10 @@ Antes de começar, você vai precisar ter as seguintes ferramentas instaladas:
 2.  **Execute as migrações do banco de dados**
 
     ```sh
-    bunx drizzle-kit migrate
+    bun db:migrate
     ```
 
-3.  **Inicie a API usando docker:**
+3.  **Inicie os serviços usando docker**
 
     ```sh
     docker-compose up api -d
@@ -51,11 +51,16 @@ Antes de começar, você vai precisar ter as seguintes ferramentas instaladas:
 
 A API estará disponível em `http://localhost:{PORT}`, onde `{PORT}` é a porta que você definiu no seu arquivo `.env`.
 
+- ops: Para cada serviço (api e realtime), o docker espera um arquivo '.env.production' em cada pasta. 
+
+    Certifique-se de que os arquivos 'api/.env.production' e 'realtime/.env.production' existem antes de iniciar a aplicação.
+
 -----
 
 ### Variáveis de Ambiente (.env)
 
 Estas são as variáveis necessárias para o funcionamento da aplicação. Elas devem ser definidas em um arquivo `.env` na raiz do projeto.
+
 
 ```properties
 # Configurações da Aplicação
