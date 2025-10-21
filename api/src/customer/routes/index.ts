@@ -20,6 +20,6 @@ const customerController = new Elysia()
   .use(deleteCustomer(appServices.customer))
   .use(updateCustomer(appServices.customer))
   .use(getCustomerOrders(appServices.customer, appServices.order))
-  .use(uploadCustomerProfileImage(appServices.customer));
+  .use(uploadCustomerProfileImage(appServices.mediaService));
 
 export { customerController };

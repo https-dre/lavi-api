@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
-import { CustomerService } from "../customer-service";
+import { MediaService } from "@/media/media-service";
 
-export const uploadCustomerProfileImage = (service: CustomerService) => {
+export const uploadCustomerProfileImage = (service: MediaService) => {
   return new Elysia().patch(
     "/customers/profile-image/:customerId",
     async ({ params, body, status }) => {
