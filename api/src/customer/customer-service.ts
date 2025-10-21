@@ -13,6 +13,7 @@ import { CustomerType } from "../shared/dto/typebox";
 import _ from "lodash";
 import { TObject } from "@sinclair/typebox";
 import { S3Provider } from "@/shared/providers/S3Provider";
+import { randomUUID } from "node:crypto";
 
 export class CustomerService {
   constructor(
@@ -163,5 +164,48 @@ export class CustomerService {
     ) as (keyof CustomerDTO)[];
     const dto = _.pick(c, dtoKeys);
     return dto;
+  }
+
+  async uploadCustomerProfileImage(
+    customerId: string,
+    arrayBuffer: ArrayBuffer,
+    fileType: string,
+  ) {
+    const customer = await this.repository.findById(customerId);
+    if (!customer) {
+      throw new BadResponse("Conta não encontrada", 404);
+    }
+
+    if (customer.profile_url) {
+      const split = customer.profile_url.split(".amazonaws.com/");
+      if (split.length == 2) {
+        const file = await this.objectStorage.getObject(split[1]);
+        if (file) {
+          await this.objectStorage.deleteObject(file.key);
+        }
+      }
+    }
+
+    // começa o upload do arquivo
+    const fileId = randomUUID();
+    const fileBuffer = Buffer.from(arrayBuffer);
+    await this.objectStorage.putObject({
+      bucket: Bun.env.BUCKET_NAME!,
+      content: fileBuffer,
+      contentType: fileType,
+      key: fileId,
+    });
+
+    const fileUploaded = await this.objectStorage.getObject(fileId);
+    if (!fileUploaded) {
+      throw new BadResponse(
+        {
+          message: "Erro no upload do arquivo",
+          err: "Arquivo não encontrado no S3",
+        },
+        500,
+      );
+    }
+    await this.repository.update({ profile_url: fileUploaded.url }, customerId);
   }
 }

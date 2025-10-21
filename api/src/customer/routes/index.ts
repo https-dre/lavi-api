@@ -8,6 +8,7 @@ import { listCustomers } from "./list-customers";
 import { appServices } from "../../shared/services";
 import { getCustomerOrders } from "./get-customer-orders";
 import { customerSessionValidator } from "../session-validator";
+import { uploadCustomerProfileImage } from "./upload-profile-image";
 
 const customerController = new Elysia()
   .use(postCustomer(appServices.customer))
@@ -18,6 +19,7 @@ const customerController = new Elysia()
   .use(customerSessionValidator({ checkAuth: appServices.customer.checkAuth }))
   .use(deleteCustomer(appServices.customer))
   .use(updateCustomer(appServices.customer))
-  .use(getCustomerOrders(appServices.customer, appServices.order));
+  .use(getCustomerOrders(appServices.customer, appServices.order))
+  .use(uploadCustomerProfileImage(appServices.customer));
 
 export { customerController };
