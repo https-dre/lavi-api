@@ -59,9 +59,9 @@ export const laundry_member = pgTable("laundry_member", {
 
 export const laundryBanner = pgTable("laundryBanners", {
   id: text().primaryKey(),
-  resource: text(),
-  resource_key: text(),
-  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }),
+  resource: text().notNull(),
+  resource_key: text().notNull(),
+  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }).notNull(),
 });
 
 export const laundryCatalogItem = pgTable("laundryCatalogItems", {
