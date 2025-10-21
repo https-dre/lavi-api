@@ -126,4 +126,16 @@ export class MediaService {
     }) as Required<LaundryBannerModel>;
     return bannerUploaded;
   }
+
+  public async listLaundryBanners(laundryId: string) {
+    const banners = await this.laundryBannerRepo.findByLaundryId(laundryId);
+    return banners;
+  }
+
+  public async deleteLaundryBanner(bannerId: string) {
+    const banner = await this.laundryBannerRepo.findById(bannerId);
+    if (!banner)
+      throw new BadResponse("Banner não encontrado.", 404);
+    await this.objectStorage.deleteObject(banner.resource_key)
+  }
 }
