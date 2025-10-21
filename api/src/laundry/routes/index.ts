@@ -6,6 +6,7 @@ import { searchLaundriesByName } from "./search-by-name";
 import { appServices } from "../../shared/services";
 import { listOrders } from "./list-orders";
 import { updateLaundry } from "./update-laundry";
+import { uploadLaundryProfileImage } from "./upload-laundry-image";
 
 const laundryController = new Elysia()
   .use(createLaundry(appServices.laundry))
@@ -13,6 +14,7 @@ const laundryController = new Elysia()
   .use(updateLaundry(appServices.laundry))
   .use(getLaundry(appServices.laundry))
   .use(searchLaundriesByName(appServices.laundry))
-  .use(listOrders(appServices.order));
+  .use(listOrders(appServices.order))
+  .use(uploadLaundryProfileImage(appServices.mediaService));
 
 export { laundryController };
