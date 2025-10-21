@@ -7,6 +7,10 @@ const envSchema = Type.Object({
   ENCRYPT_CORE_KEY: Type.String(),
   BLIND_KEY: Type.String(),
   JWT_KEY: Type.String(),
+  BUCKET_NAME: Type.String(),
+  AWS_ACCESS_KEY_ID: Type.String(),
+  AWS_SECRET_ACCESS_KEY: Type.String(),
+  AWS_REGION: Type.String(),
 });
 
 export const verify_env = () => {
