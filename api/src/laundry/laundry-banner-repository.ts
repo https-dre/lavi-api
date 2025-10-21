@@ -1,7 +1,7 @@
 import { ILaundryBannerRepository } from "../shared/repositories";
-import { db } from "../../database/conn";
+import { db } from "@/database/conn";
 import { LaundryBannerModel } from "../shared/models";
-import * as t from "../../database/tables";
+import * as t from "@/database/tables";
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
 
