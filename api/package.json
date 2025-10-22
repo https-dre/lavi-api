@@ -5,9 +5,7 @@
   "main": "src/server.ts",
   "private": true,
   "scripts": {
-    "e2e": "vitest run",
     "dev": "bun run --watch src/index.ts",
-    "build": "bun build src/index.ts --compile --outfile server",
     "start": "bun run src/index.ts",
     "db:schema": "bunx --bun drizzle-kit generate",
     "db:migrate": "bunx drizzle-kit migrate"
@@ -29,7 +27,9 @@
     "drizzle-kit": "^0.31.4",
     "supertest": "^7.1.4",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
+	"@elysiajs/opentelemetry": "^1.4.1",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.207.0",
+    "@opentelemetry/sdk-trace-node": "^2.2.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.864.0",
