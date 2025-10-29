@@ -8,6 +8,7 @@ import { ILaundryRepository, IMemberRepository } from "@/shared/repositories";
 import { MemberDTO } from "../shared/dto";
 import { MemberType } from "../shared/dto/typebox";
 import _ from "lodash";
+import JWT from "jsonwebtoken";
 
 export class MemberService {
   private allowed_roles: string[] = ["owner", "employee"];
@@ -125,5 +126,23 @@ export class MemberService {
       const { password, ...rest } = m;
       return rest;
     });
+  }
+  public async checkJwt(token: string) {
+    try {
+      const payload = this.jwt.verifyToken(token) as {
+        memberId: string;
+        roles: string[];
+      };
+      if (!(await this.repository.findById(payload.memberId)))
+        throw new BadResponse("Conta não encontrada!", 404);
+      return payload;
+    } catch (err) {
+      if (err instanceof JWT.TokenExpiredError)
+        throw new BadResponse("Sessão expirou.");
+      if (err instanceof JWT.JsonWebTokenError)
+        throw new BadResponse("Sessão inválida.", 401);
+
+      throw err;
+    }
   }
 }

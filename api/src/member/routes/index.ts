@@ -7,8 +7,10 @@ import { createEmployeeMember } from "./create-employee";
 import { listMembers } from "./list-members";
 import { deleteMember } from "./delete-member";
 import { getLaundriesByMember } from "./get-laundries-by-member";
+import { validateAuthToken } from "./validate-token";
 
 const memberController = new Elysia()
+  .use(validateAuthToken(appServices.member))
   .use(authenticateMember(appServices.member))
   .use(createMember(appServices.member))
   .use(createOwnerMember(appServices.member))
