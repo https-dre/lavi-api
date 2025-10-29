@@ -24,8 +24,12 @@ services:
     build:
       context: ./realtime
     env_file: ./realtime/.env.production
+    environment:
+      - API_ADDR=api
     ports:
       - "${WS_PORT}:${WS_PORT}"
+    depends_on:
+      - api
 
 volumes:
   lavi_data:
