@@ -9,12 +9,14 @@ import { appServices } from "../../shared/services";
 import { getCustomerOrders } from "./get-customer-orders";
 import { customerSessionValidator } from "../session-validator";
 import { uploadCustomerProfileImage } from "./upload-profile-image";
+import { validateCustomerJWT } from "./validate-token";
 
 const customerController = new Elysia()
   .use(postCustomer(appServices.customer))
   .use(authenticateCustomer(appServices.customer))
   .use(listCustomers(appServices.customer))
   .use(getCustomer(appServices.customer))
+  .use(validateCustomerJWT(appServices.customer))
   // routes with authentication
   .use(customerSessionValidator({ checkAuth: appServices.customer.checkAuth }))
   .use(deleteCustomer(appServices.customer))
