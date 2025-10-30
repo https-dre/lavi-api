@@ -5,6 +5,7 @@ import { logger } from "./logger";
 const envSchema = Type.Object({
   API_ADDR: Type.String({ format: "idn-hostname" }),
   WS_PORT: Type.String(),
+  REDIS_HOST: Type.String({ format: "idn-hostname" }),
 });
 
 export function validateEnv() {

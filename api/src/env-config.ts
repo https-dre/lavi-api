@@ -11,13 +11,14 @@ const envSchema = Type.Object({
   AWS_ACCESS_KEY_ID: Type.String(),
   AWS_SECRET_ACCESS_KEY: Type.String(),
   AWS_REGION: Type.String(),
+  REDIS_HOST: Type.String({ format: "idn-hostname" }),
 });
 
 export const verify_env = () => {
   logger.info("Checking Environment...");
   const errors = [...Value.Errors(envSchema, process.env)];
   if (errors.length > 0) {
-    errors.map((err) => logger.fatal(`Missing ${err.path}`));
+    errors.map((err) => logger.fatal(`${err.path} ${err.message}`));
     process.exit(1);
   }
   logger.info("Environment ok!");
