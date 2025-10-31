@@ -1,10 +1,11 @@
 services:
   database:
+    container_name: lavi_postgres
     image: postgres:16
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=laundry_api
+      - POSTGRES_DB=lavi_db
     ports:
       - "5432:5432"
     healthcheck:
@@ -24,6 +25,7 @@ services:
       - lavi_backend
 
   api:
+    container_name: lavi-api
     build:
       context: ./api
     env_file: ./api/.env.production
@@ -35,6 +37,7 @@ services:
       - lavi_backend
 
   realtime:
+    container_name: lavi-realtime
     build:
       context: ./realtime
     env_file: ./realtime/.env.production
@@ -50,3 +53,8 @@ services:
 
 volumes:
   lavi_data:
+
+networks:
+  lavi_backend:
+    name: lavi_backend
+    driver: bridge
