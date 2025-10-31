@@ -58,7 +58,7 @@ const appServices = {
   catalogService: new CatalogItemService(catalogRepository, laundryRepository),
   mediaService: new MediaService(objectStorage, {
     memberRepository, customerRepository,
-    laundryRepository, laundryBanner: laundryBannerRepository
+    laundryRepository, laundryBanner: laundryBannerRepository, feedbackRepository
   }),
   feedbackService: new FeedbackService(feedbackRepository, laundryRepository, customerRepository)
 };

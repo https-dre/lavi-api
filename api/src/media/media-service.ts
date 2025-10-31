@@ -1,30 +1,47 @@
 import { customer } from "@/database/tables";
 import { BadResponse } from "@/http/error-handler";
 import { logger } from "@/logger";
+import { FeedbackImageDTO } from "@/shared/dto";
 import { LaundryBannerModel } from "@/shared/models";
 import { S3Provider } from "@/shared/providers/S3Provider";
-import { ICustomerRepository, ILaundryBannerRepository, ILaundryRepository, IMemberRepository } from "@/shared/repositories";
+import {
+  ICustomerRepository,
+  IFeedbackRepository,
+  ILaundryBannerRepository,
+  ILaundryRepository,
+  IMemberRepository,
+} from "@/shared/repositories";
 import { randomUUID } from "crypto";
-import { url } from "inspector";
 
 type MediaService_Repositories = {
-  memberRepository: IMemberRepository,
-  customerRepository: ICustomerRepository,
-  laundryRepository: ILaundryRepository,
-  laundryBanner: ILaundryBannerRepository
-}
+  memberRepository: IMemberRepository;
+  customerRepository: ICustomerRepository;
+  laundryRepository: ILaundryRepository;
+  laundryBanner: ILaundryBannerRepository;
+  feedbackRepository: IFeedbackRepository;
+};
+
+type S3File_t = {
+  content: ArrayBuffer;
+  contentType: string;
+};
 
 export class MediaService {
-  private memberRepository: IMemberRepository
-  private customerRepository: ICustomerRepository
-  private laundryRepository: ILaundryRepository
-  private laundryBannerRepo: ILaundryBannerRepository
+  private memberRepository: IMemberRepository;
+  private customerRepository: ICustomerRepository;
+  private laundryRepository: ILaundryRepository;
+  private laundryBannerRepo: ILaundryBannerRepository;
+  private feedbackRepository: IFeedbackRepository;
 
-  constructor(private objectStorage: S3Provider, repositories: MediaService_Repositories) {
-    this.memberRepository = repositories.memberRepository,
-      this.customerRepository = repositories.customerRepository,
-      this.laundryRepository = repositories.laundryRepository,
-      this.laundryBannerRepo = repositories.laundryBanner
+  constructor(
+    private objectStorage: S3Provider,
+    repositories: MediaService_Repositories
+  ) {
+    (this.memberRepository = repositories.memberRepository),
+      (this.customerRepository = repositories.customerRepository),
+      (this.laundryRepository = repositories.laundryRepository),
+      (this.laundryBannerRepo = repositories.laundryBanner);
+    this.feedbackRepository = repositories.feedbackRepository;
   }
 
   public async uploadFile(arrBuffer: ArrayBuffer, fileType: string) {
@@ -34,15 +51,18 @@ export class MediaService {
       bucket: Bun.env.BUCKET_NAME!,
       content: fileBuffer,
       contentType: fileType,
-      key: fileId
-    })
+      key: fileId,
+    });
 
     const fileUploaded = await this.objectStorage.getObject(fileId);
     if (!fileUploaded) {
-      throw new BadResponse({
-        message: "Erro no upload do arquivo",
-        err: "Arquivo não encontrado no S3",
-      }, 500)
+      throw new BadResponse(
+        {
+          message: "Erro no upload do arquivo",
+          err: "Arquivo não encontrado no S3",
+        },
+        500
+      );
     }
 
     return fileUploaded;
@@ -50,8 +70,8 @@ export class MediaService {
 
   public async deleteFileByUrl(url: string) {
     if (!url.startsWith("https") || !url.includes(".amazonaws.com")) {
-      logger.warn("[MediaService] param is not a valid S3 url")
-      return
+      logger.warn("[MediaService] param is not a valid S3 url");
+      return;
     }
     const split = url.split(".amazonaws.com/");
     if (split.length == 2) {
@@ -62,24 +82,29 @@ export class MediaService {
     }
   }
 
-  public async uploadMemberProfileImage(memberId: string, arrBuffer: ArrayBuffer, fileType: string) {
+  public async uploadMemberProfileImage(
+    memberId: string,
+    arrBuffer: ArrayBuffer,
+    fileType: string
+  ) {
     const member = await this.memberRepository.findById(memberId);
-    if (!member)
-      throw new BadResponse("Membro não encontrado.", 404);
+    if (!member) throw new BadResponse("Membro não encontrado.", 404);
 
     if (member.profile_url) {
-      await this.deleteFileByUrl(member.profile_url)
+      await this.deleteFileByUrl(member.profile_url);
     }
 
-    const fileUploaded = await this.uploadFile(arrBuffer, fileType)
+    const fileUploaded = await this.uploadFile(arrBuffer, fileType);
 
-    await this.memberRepository.updateFields(memberId, { profile_url: fileUploaded.url })
+    await this.memberRepository.updateFields(memberId, {
+      profile_url: fileUploaded.url,
+    });
   }
 
   async uploadCustomerProfileImage(
     customerId: string,
     arrayBuffer: ArrayBuffer,
-    fileType: string,
+    fileType: string
   ) {
     const customer = await this.customerRepository.findById(customerId);
     if (!customer) {
@@ -87,17 +112,20 @@ export class MediaService {
     }
 
     if (customer.profile_url) {
-      await this.deleteFileByUrl(customer.profile_url)
+      await this.deleteFileByUrl(customer.profile_url);
     }
 
     const fileUploaded = await this.uploadFile(arrayBuffer, fileType);
-    await this.customerRepository.update({ profile_url: fileUploaded.url }, customerId);
+    await this.customerRepository.update(
+      { profile_url: fileUploaded.url },
+      customerId
+    );
   }
 
   async uploadLaundryProfileImage(
     laundryId: string,
     arrayBuffer: ArrayBuffer,
-    fileType: string,
+    fileType: string
   ) {
     const laundry = await this.laundryRepository.findById(laundryId);
     if (!laundry) {
@@ -105,25 +133,30 @@ export class MediaService {
     }
 
     if (laundry.profile_url) {
-      await this.deleteFileByUrl(laundry.profile_url)
+      await this.deleteFileByUrl(laundry.profile_url);
     }
 
     const fileUploaded = await this.uploadFile(arrayBuffer, fileType);
-    await this.customerRepository.update({ profile_url: fileUploaded.url }, laundryId);
+    await this.customerRepository.update(
+      { profile_url: fileUploaded.url },
+      laundryId
+    );
   }
 
-  public async uploadLaundryBanner(laundryId: string,
-    arrBuffer: ArrayBuffer, fileType: string): Promise<LaundryBannerModel> {
+  public async uploadLaundryBanner(
+    laundryId: string,
+    arrBuffer: ArrayBuffer,
+    fileType: string
+  ): Promise<LaundryBannerModel> {
     const laundry = await this.laundryRepository.findById(laundryId);
-    if (!laundry)
-      throw new BadResponse("Lavanderia não encontrada", 404);
+    if (!laundry) throw new BadResponse("Lavanderia não encontrada", 404);
 
     const fileUploaded = await this.uploadFile(arrBuffer, fileType);
-    const bannerUploaded = await this.laundryBannerRepo.save({
+    const bannerUploaded = (await this.laundryBannerRepo.save({
       laundryId,
       resource: fileUploaded.url,
       resource_key: fileUploaded.key,
-    }) as Required<LaundryBannerModel>;
+    })) as Required<LaundryBannerModel>;
     return bannerUploaded;
   }
 
@@ -134,8 +167,27 @@ export class MediaService {
 
   public async deleteLaundryBanner(bannerId: string) {
     const banner = await this.laundryBannerRepo.findById(bannerId);
-    if (!banner)
-      throw new BadResponse("Banner não encontrado.", 404);
-    await this.objectStorage.deleteObject(banner.resource_key)
+    if (!banner) throw new BadResponse("Banner não encontrado.", 404);
+    await this.objectStorage.deleteObject(banner.resource_key);
+  }
+
+  public async uploadFeedbackImages(feedbackId: string, images: S3File_t[]) {
+    if (await this.feedbackRepository.findById(feedbackId))
+      throw new BadResponse("Feedback não encontrado.", 404);
+
+    let feedbackImages: FeedbackImageDTO[] = [];
+
+    for (const file of images) {
+      const fileUploaded = await this.uploadFile(file.content, file.contentType)
+      feedbackImages.push({
+        id: randomUUID(),
+        url: fileUploaded.url,
+        objectId: fileUploaded.key,
+        postId: feedbackId
+      })
+    }
+
+    const saved = await this.feedbackRepository.saveImages(feedbackImages);
+    return saved;
   }
 }

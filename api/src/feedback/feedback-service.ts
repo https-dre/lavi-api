@@ -11,9 +11,11 @@ export class FeedbackService {
     private repository: IFeedbackRepository,
     private laundryRepository: ILaundryRepository,
     private customerRepository: ICustomerRepository
-  ) { }
+  ) {}
 
-  async saveFeedback(data: Omit<FeedbackDTO, "id" | "created_at">): Promise<FeedbackDTO> {
+  async saveFeedback(
+    data: Omit<FeedbackDTO, "id" | "created_at">
+  ): Promise<FeedbackDTO> {
     if (!(await this.laundryRepository.findById(data.laundryId)))
       throw new BadResponse("Lavanderia não encontrada.", 404);
     if (!(await this.customerRepository.findById(data.customerId)))
@@ -27,5 +29,14 @@ export class FeedbackService {
       throw new BadResponse("Registro do Feedback não encontrado.", 404);
 
     await this.repository.deleteById(id);
+  }
+
+  async listFeedbacksByLaundryId(
+    laundryId: string,
+    page: number = 1,
+    pageSize: number = 10
+  ) {
+    const feedbacks = await this.repository.findWithInnerJoin(laundryId, page, pageSize);
+    return feedbacks;
   }
 }

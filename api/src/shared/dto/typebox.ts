@@ -5,7 +5,7 @@ const DateISO = Type.Transform(
     format: "date-time",
     description: "Date with format ISO 8601",
     default: "2025-09-18T19:35:25.102Z",
-  }),
+  })
 )
   .Decode((value) => value.toISOString())
   .Encode((value) => new Date(value));
@@ -53,8 +53,8 @@ export const LaundryBannerType = Type.Object({
   id: Type.String({ format: "uuid" }),
   resource: Type.String(),
   resource_key: Type.String(),
-  laundryId: Type.String({ format: "uuid" })
-})
+  laundryId: Type.String({ format: "uuid" }),
+});
 
 export const OrderItemType = Type.Object({
   id: Type.String(),
@@ -101,18 +101,18 @@ export const CatalogItemType = Type.Object({
 });
 
 export const FeedbackType = Type.Object({
-  id: Type.String({ format: "uuid " }),
+  id: Type.String({ format: "uuid" }),
   content: Type.String(),
   title: Type.String(),
   rate: Type.Integer(),
   created_at: Type.Union([DateISO, Type.Null()]),
   laundryId: Type.String({ format: "uuid" }),
-  customerId: Type.String({ format: "uuid" })
-})
+  customerId: Type.String({ format: "uuid" }),
+});
 
 export const FeedbackImageType = Type.Object({
   id: Type.String({ format: "uuid" }),
   url: Type.String({ format: "uri" }),
   objectId: Type.String(),
-  postId: Type.String({ format: "uuid" })
-})
+  postId: Type.String({ format: "uuid" }),
+});

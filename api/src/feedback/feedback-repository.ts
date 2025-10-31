@@ -2,29 +2,57 @@ import { db } from "@/database/conn";
 import * as t from "@/database/tables";
 import { FeedbackImageModel, FeedbackModel } from "@/shared/models";
 import { IFeedbackRepository } from "@/shared/repositories";
-import { randomUUID } from "crypto";
+import { randomUUIDv7 } from "bun";
 import { eq } from "drizzle-orm";
 
-type InnerJoinWithImages = {
-  feedbackPosts: FeedbackModel;
-  feedbacImages: FeedbackImageModel;
-};
+type FeedbackWithImages = {
+  feedbackPost: typeof t.feedbackPost.$inferSelect;
+  feedbackImages: typeof t.feedbackImage.$inferSelect[];
+  customerName: string;
+  customerProfileUrl: string | null;
+}
 
 export class FeedbackRepository implements IFeedbackRepository {
   async findWithInnerJoin(
     laundryId: string,
     page: number = 1,
     pageSize: number = 10
-  ) {
+  ) { 
+
     const result = await db
-      .select()
+      .select({
+        post: t.feedbackPost,
+        image: t.feedbackImage,
+        customerName: t.customer.name, 
+        customerProfileUrl: t.customer.profile_url
+      })
       .from(t.feedbackPost)
       .where(eq(t.feedbackPost.laundryId, laundryId))
       .limit(pageSize)
       .offset((page - 1) * pageSize)
-      .leftJoin(t.feedbackImage, eq(t.feedbackPost.id, t.feedbackImage.postId));
+      .leftJoin(t.feedbackImage, eq(t.feedbackPost.id, t.feedbackImage.postId))
+      .leftJoin(t.customer, eq(t.feedbackPost.customerId, t.customer.id));
 
-    return result[0].feedbackPosts;
+
+    const groupedResults: Record<string, FeedbackWithImages> = {};
+
+    for (const row of result) {
+      const postId = row.post.id;
+
+      if (!groupedResults[postId]) {
+        groupedResults[postId] = {
+          feedbackPost: row.post,
+          customerName: row.customerName!, 
+          customerProfileUrl: row.customerProfileUrl,
+          feedbackImages: []
+        };
+      }
+      if (row.image) {
+        groupedResults[postId].feedbackImages.push(row.image);
+      }
+    }
+
+    return Object.values(groupedResults);
   }
   async findByCustomerId(
     customerId: string,
@@ -63,7 +91,7 @@ export class FeedbackRepository implements IFeedbackRepository {
       .insert(t.feedbackPost)
       .values({
         ...data,
-        id: randomUUID(),
+        id: randomUUIDv7(),
       })
       .returning();
     return saved[0];
@@ -78,7 +106,7 @@ export class FeedbackRepository implements IFeedbackRepository {
         images.map((img) => {
           return {
             ...img,
-            id: randomUUID(),
+            id: randomUUIDv7(),
           };
         })
       )
