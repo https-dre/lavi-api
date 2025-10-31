@@ -11,7 +11,7 @@ const envSchema = Type.Object({
   AWS_ACCESS_KEY_ID: Type.String(),
   AWS_SECRET_ACCESS_KEY: Type.String(),
   AWS_REGION: Type.String(),
-  REDIS_HOST: Type.String({ format: "idn-hostname" }),
+  REDIS_HOST: Type.String(),
 });
 
 export const verify_env = () => {
