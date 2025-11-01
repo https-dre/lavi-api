@@ -1,16 +1,16 @@
-import { customer } from "@/database/tables";
-import { BadResponse } from "@/http/error-handler";
-import { logger } from "@/logger";
-import { FeedbackImageDTO } from "@/shared/dto";
-import { LaundryBannerModel } from "@/shared/models";
-import { S3Provider } from "@/shared/providers/S3Provider";
+import { customer } from "@/infra/database/tables";
+import { BadResponse } from "@/infra/http/error-handler";
+import { logger } from "@/config/logger";
+import { FeedbackImageDTO } from "@/types/dtos";
+import { LaundryBannerModel } from "@/types/models";
+import { S3Provider } from "@/infra/providers/S3Provider";
 import {
   ICustomerRepository,
   IFeedbackRepository,
   ILaundryBannerRepository,
   ILaundryRepository,
   IMemberRepository,
-} from "@/shared/repositories";
+} from "@/types/repositories";
 import { randomUUID } from "crypto";
 
 type MediaService_Repositories = {
