@@ -1,6 +1,7 @@
 import Elysia, { t } from "elysia";
 import { OrderService } from "../order-service";
 import { OrderItemType, OrderType } from "@/types/typebox";
+import { redisProvider } from "@/generators/redis-providers";
 
 export const createOrder = (service: OrderService): Elysia => {
   return new Elysia().post(
@@ -9,6 +10,7 @@ export const createOrder = (service: OrderService): Elysia => {
       const { order, items } = body;
       const result = await service.createOrder(order);
       await service.pushOrderItems(result.id, items);
+      redisProvider.orderCreatedPublisher.publish({ order: result });
       return status(201, { order: result });
     },
     {
