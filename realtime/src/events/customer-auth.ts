@@ -1,5 +1,5 @@
 import type { Socket } from "socket.io";
-import { axiosApi } from "@/axios-api";
+import { axiosApi } from "@/infra/api/axios-api";
 
 export const addCustomerAuth = (socket: Socket) => {
   socket.on("customer-auth", async (data) => {

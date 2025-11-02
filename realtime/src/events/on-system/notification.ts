@@ -1,4 +1,4 @@
-import { ioServer } from "@/socket/server";
+import { ioServer } from "@/infra/socket.io/server";
 import type { Socket } from "socket.io";
 
 export const addNotification = async (socket: Socket) => {

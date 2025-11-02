@@ -1,6 +1,6 @@
-import { validateEnv } from "./config";
-import { logger } from "./logger";
-import { ioServer } from "./socket/server";
+import { validateEnv } from "./config/env";
+import { logger } from "./config/logger";
+import { ioServer } from "./infra/socket.io/server";
 
 validateEnv();
 logger.info(`API_ADDR: ${Bun.env.API_ADDR}`);

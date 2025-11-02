@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="03df2d2c-d25f-43cc-9f18-4c2c4ca715db" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/realtime/src/axios-api.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/realtime/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/logger.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/socket/events/connection.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/socket/events/customer-auth.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/socket/events/member-auth.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/socket/events/on-system/custom-event.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/socket/events/on-system/notification.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/socket/events/on-system/notify-authenticated.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/realtime/src/socket/server.ts" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="34vopaduKZU1yTTz1lvw1L71S42" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "dev",
+    "junie.onboarding.icon.badge.shown": "true",
+    "nodejs_package_manager_path": "bun",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/home/calango/lab/lavi-api/api/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-WS-252.27397.92" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="03df2d2c-d25f-43cc-9f18-4c2c4ca715db" name="Changes" comment="" />
+      <created>1762103593405</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1762103593405</updated>
+      <workItem from="1762103594851" duration="63000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
