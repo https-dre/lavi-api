@@ -6,6 +6,7 @@ const envSchema = Type.Object({
   API_ADDR: Type.String({ format: "idn-hostname" }),
   WS_PORT: Type.String(),
   REDIS_HOST: Type.String({ format: "idn-hostname" }),
+  REDIS_PORT: Type.String(),
 });
 
 export function validateEnv() {
