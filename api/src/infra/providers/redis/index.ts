@@ -17,3 +17,15 @@ export class RedisQueueProvider {
     }
   }
 }
+
+export class RedisPublisher {
+  constructor(private channel_name: string) {}
+
+  public async publish(payload: object) {
+    try {
+      await redisConn.publish(this.channel_name, JSON.stringify(payload));
+    } catch (err) {
+      logger.error("Erro ao enviar evento!");
+    }
+  }
+}
