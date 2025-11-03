@@ -4,6 +4,7 @@
     "": {
       "name": "realtime",
       "dependencies": {
+        "@sinclair/typebox": "^0.34.41",
         "@socket.io/bun-engine": "^0.0.3",
         "axios": "^1.13.1",
         "express": "^5.1.0",
@@ -25,6 +26,8 @@
     "@ioredis/commands": ["@ioredis/commands@1.4.0", "", {}, "sha512-aFT2yemJJo+TZCmieA7qnYGQooOS7QfNmYrzGtsYd3g9j5iDP8AimYYAesf79ohjbLG12XxC4nG5DyEnC88AsQ=="],
 
     "@pinojs/redact": ["@pinojs/redact@0.4.0", "", {}, "sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg=="],
+
+    "@sinclair/typebox": ["@sinclair/typebox@0.34.41", "", {}, "sha512-6gS8pZzSXdyRHTIqoqSVknxolr1kzfy4/CeDnrzsVz8TTIWUbOBr6gnzOmTYJ3eXQNh4IYHIGi5aIL7sOZ2G/g=="],
 
     "@socket.io/bun-engine": ["@socket.io/bun-engine@0.0.3", "", { "peerDependencies": { "typescript": "^5" } }, "sha512-OK2ZObq9hKsxyAcV7xDTcWGubBmfEY3Lt4nb04K+HlYl9G5PDgrY9hxJm9uV+B0xo3MhKFrgdg9VQsVZ3pbT/g=="],
 
