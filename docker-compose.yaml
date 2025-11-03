@@ -31,10 +31,14 @@ services:
     env_file: ./api/.env.production
     environment:
       - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
     ports:
       - "${PORT}:${PORT}"
     depends_on:
-      - redis
+      redis:
+        condition: service_started
+      database:
+        condition: service_healthy
     networks:
       - lavi_backend
 
@@ -46,13 +50,32 @@ services:
     environment:
       - API_ADDR=api
       - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
     ports:
       - "${WS_PORT}:${WS_PORT}"
     depends_on:
-      - api
-      - redis
+      api:
+        condition: service_started
+      redis:
+        condition: service_started
     networks:
       - lavi_backend
+
+  worker:
+    container_name: lavi-worker
+    build:
+      context: ./worker/
+    env_file: ./worker/.env.production
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+      - WS_ADDR=realtime
+      - WS_PORT=${WS_PORT}
+    depends_on:
+      redis:
+        condition: service_started
+      realtime:
+        condition: service_started
 
 volumes:
   lavi_data:
