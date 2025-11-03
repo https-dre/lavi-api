@@ -6,5 +6,5 @@ echo "Preparing environment"
 bash ci/setup.sh
 
 echo "Start with docker setup"
-
-docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d
+docker-compose down
+docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up --force-recreate --build -d
