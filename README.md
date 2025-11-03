@@ -30,30 +30,19 @@ Antes de começar, você vai precisar ter as seguintes ferramentas instaladas:
 
 ### Executando a Aplicação
 
-1.  **Inicie o banco de dados com Docker:**
-    Este comando irá iniciar um container com o PostgreSQL em background.
+1.  **Iniciar a aplicação com suas dependências**
+
+    Este comando executa a criação dos containers em modo de produção, copiando as variáveis do arquivo '.env'
 
     ```sh
-    docker-compose up database -d
-    ```
-
-2.  **Execute as migrações do banco de dados**
-
-    ```sh
-    bun db:migrate
-    ```
-
-3.  **Inicie os serviços usando docker**
-
-    ```sh
-    docker-compose up api -d
+    bash ci/start.sh
     ```
 
 A API estará disponível em `http://localhost:{PORT}`, onde `{PORT}` é a porta que você definiu no seu arquivo `.env`.
 
-- ops: Para cada serviço (api e realtime), o docker espera um arquivo '.env.production' em cada pasta. 
+- ops: Para cada serviço (api, realtime e worker), o docker espera um arquivo '.env.production' em cada pasta. 
 
-    Certifique-se de que os arquivos 'api/.env.production' e 'realtime/.env.production' existem antes de iniciar a aplicação.
+    O script "ci/start.sh" copia do ".env" na raiz do projeto, certifique-se de ter um ".env" válido.
 
 -----
 
@@ -64,7 +53,9 @@ Estas são as variáveis necessárias para o funcionamento da aplicação. Elas 
 
 ```properties
 # Configurações da Aplicação
-PORT=3333
+PORT=3000
+WS_PORT=443
+REDIS_PORT=6379
 
 # Banco de Dados (API e Docker)
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname?schema=public"
