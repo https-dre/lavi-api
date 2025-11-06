@@ -15,6 +15,8 @@ import { MediaService } from "@/media/media-service";
 import { LaundryBannerRepository } from "@/modules/laundry/laundry-banner-repository";
 import { FeedbackService } from "@/modules/feedback/feedback-service";
 import { FeedbackRepository } from "@/modules/feedback/feedback-repository";
+import { NotificationRepository } from "@/modules/notifications/notification-repository";
+import { NotificationService } from "@/modules/notifications/notification-service";
 
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
@@ -23,6 +25,7 @@ const laundryBannerRepository = new LaundryBannerRepository();
 const memberRepository = new MemberRepository();
 const catalogRepository = new CatalogRepository();
 const feedbackRepository = new FeedbackRepository();
+const notificationRepository = new NotificationRepository();
 
 const cryptoProvider = new CryptoProvider();
 const jwtProvider = new JwtProvider();
@@ -57,10 +60,18 @@ const appServices = {
   ),
   catalogService: new CatalogItemService(catalogRepository, laundryRepository),
   mediaService: new MediaService(objectStorage, {
-    memberRepository, customerRepository,
-    laundryRepository, laundryBanner: laundryBannerRepository, feedbackRepository
+    memberRepository,
+    customerRepository,
+    laundryRepository,
+    laundryBanner: laundryBannerRepository,
+    feedbackRepository,
   }),
-  feedbackService: new FeedbackService(feedbackRepository, laundryRepository, customerRepository)
+  feedbackService: new FeedbackService(
+    feedbackRepository,
+    laundryRepository,
+    customerRepository,
+  ),
+  notificationService: new NotificationService(notificationRepository, memberRepository, customerRepository)
 };
 
 export { appServices };
