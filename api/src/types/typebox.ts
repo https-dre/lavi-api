@@ -5,7 +5,7 @@ const DateISO = Type.Transform(
     format: "date-time",
     description: "Date with format ISO 8601",
     default: "2025-09-18T19:35:25.102Z",
-  })
+  }),
 )
   .Decode((value) => value.toISOString())
   .Encode((value) => new Date(value));
@@ -115,4 +115,21 @@ export const FeedbackImageType = Type.Object({
   url: Type.String({ format: "uri" }),
   objectId: Type.String(),
   postId: Type.String({ format: "uuid" }),
+});
+
+const status_t = Type.Union([
+  Type.Literal("unread"),
+  Type.Literal("sent"),
+  Type.Literal("readed"),
+]);
+
+export const NotificationType = Type.Object({
+  id: Type.String({ format: "uuid" }),
+  type: Type.String({ maxLength: 100 }),
+  title: Type.String({ maxLength: 450 }),
+  content: Type.String({ maxLength: 500 }),
+  status: status_t,
+  userId: Type.String({ format: "uuid" }),
+  userType: Type.String({ maxLength: 10 }),
+  created_at: Type.Union([DateISO, Type.Null()]),
 });

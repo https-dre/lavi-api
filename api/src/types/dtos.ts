@@ -8,6 +8,7 @@ import {
   FeedbackType,
   FeedbackImageType,
   LaundryBannerType,
+  NotificationType,
 } from "./typebox";
 
 export type CustomerDTO = typeof CustomerType.static;
@@ -25,3 +26,5 @@ export type CatalogItemDTO = typeof CatalogItemType.static;
 export type FeedbackDTO = typeof FeedbackType.static;
 
 export type FeedbackImageDTO = typeof FeedbackImageType.static;
+
+export type NotificationDTO = typeof NotificationType.static;
