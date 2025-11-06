@@ -139,10 +139,19 @@ export interface INotificationRepository {
     data: Omit<NotificationDTO, "id" | "created_at">,
   ): Promise<NotificationDTO>;
   delete(id: string): Promise<void>;
-  findByUserId(userId: string): Promise<NotificationDTO[]>;
+  findByUserId(
+    userId: string,
+    page?: number,
+    pageSize?: number,
+  ): Promise<NotificationDTO[]>;
   deleteWithUserId(userId: string): Promise<void>;
-  listCustomerNotifications(customerId: string): Promise<NotificationDTO[]>;
-  listMemberNotifications(memberId: string): Promise<NotificationDTO[]>;
+  listNotifications(
+    userId: string,
+    userType: "customer" | "member",
+    page?: number,
+    pageSize?: number,
+    status?: string,
+  ): Promise<NotificationDTO[]>;
   updateNotification(
     notificationId: string,
     fields: Partial<Omit<NotificationDTO, "id" | "created_at" | "userType">>,

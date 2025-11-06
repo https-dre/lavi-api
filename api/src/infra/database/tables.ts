@@ -159,7 +159,7 @@ export const notifications = pgTable("notifications", {
   type: varchar({ length: 100 }).notNull(),
   title: varchar({ length: 450 }).notNull(),
   content: varchar({ length: 500 }).notNull(),
-  is_read: boolean().default(false).notNull(),
+  status: varchar({ length: 10 }).notNull(),
   userId: text().notNull(),
   userType: varchar({ length: 10 }).notNull(),
   created_at: timestamp().defaultNow(),

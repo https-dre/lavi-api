@@ -64,4 +64,13 @@ export class NotificationService {
   public async deleteUserNotifications(userId: string) {
     await this.repository.deleteWithUserId(userId);
   }
+
+  public async listNotifications(
+    userId: string,
+    page: number = 1,
+    pageSize: number = 10,
+    status?: string,
+  ) {
+    
+  }
 }

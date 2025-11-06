@@ -3,7 +3,7 @@ import { NotificationDTO } from "@/types/dtos";
 import { INotificationRepository } from "@/types/repositories";
 import * as t from "@/infra/database/tables";
 import { randomUUIDv7 } from "bun";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 export class NotificationRepository implements INotificationRepository {
   public async save(
@@ -19,11 +19,17 @@ export class NotificationRepository implements INotificationRepository {
     return created[0];
   }
 
-  public async findByUserId(userId: string): Promise<NotificationDTO[]> {
+  public async findByUserId(
+    userId: string,
+    page: number = 1,
+    pageSize: number = 10,
+  ): Promise<NotificationDTO[]> {
     const notifications = await db
       .select()
       .from(t.notifications)
-      .where(eq(t.notifications.userId, userId));
+      .where(eq(t.notifications.userId, userId))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize);
     return notifications;
   }
 
@@ -35,33 +41,27 @@ export class NotificationRepository implements INotificationRepository {
     await db.delete(t.notifications).where(eq(t.notifications.userId, userId));
   }
 
-  public async listCustomerNotifications(
-    customerId: string,
+  public async listNotifications(
+    userId: string,
+    userType: "customer" | "member",
+    page: number = 1,
+    pageSize: number = 10,
+    status?: string,
   ): Promise<NotificationDTO[]> {
     const result = await db
       .select()
       .from(t.notifications)
       .where(
         and(
-          eq(t.notifications.userType, "customer"),
-          eq(t.notifications.userId, customerId),
+          eq(t.notifications.userType, userType),
+          eq(t.notifications.userId, userId),
+          status ? eq(t.notifications.status, status) : undefined,
         ),
-      );
+      )
+      .orderBy(desc(t.notifications.created_at))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize);
     return result;
-  }
-
-  public async listMemberNotifications(
-    memberId: string,
-  ): Promise<NotificationDTO[]> {
-    return await db
-      .select()
-      .from(t.notifications)
-      .where(
-        and(
-          eq(t.notifications.userType, "customer"),
-          eq(t.notifications.userId, memberId),
-        ),
-      );
   }
 
   public async updateNotification(
