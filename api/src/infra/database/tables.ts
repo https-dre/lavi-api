@@ -61,7 +61,9 @@ export const laundryBanner = pgTable("laundryBanners", {
   id: text().primaryKey(),
   resource: text().notNull(),
   resource_key: text().notNull(),
-  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }).notNull(),
+  laundryId: text()
+    .references(() => laundry.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
 export const laundryCatalogItem = pgTable("laundryCatalogItems", {
@@ -135,15 +137,42 @@ export const feedbackPost = pgTable("feedbackPosts", {
   content: text().notNull(),
   rate: integer().notNull(),
   created_at: timestamp().defaultNow(),
-  laundryId: text().references(() => laundry.id, { onDelete: "cascade" }).notNull(),
-  customerId: text().references(() => customer.id, { onDelete: "cascade" }).notNull(),
+  laundryId: text()
+    .references(() => laundry.id, { onDelete: "cascade" })
+    .notNull(),
+  customerId: text()
+    .references(() => customer.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
 export const feedbackImage = pgTable("feedbackImages", {
   id: text().primaryKey(),
   objectId: text().notNull(),
   url: text().notNull(),
-  postId: text().references(() => feedbackPost.id, { onDelete: "cascade" }).notNull(),
+  postId: text()
+    .references(() => feedbackPost.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
+export const notifications = pgTable("notifications", {
+  id: text().primaryKey(),
+  type: varchar({ length: 100 }).notNull(),
+  title: varchar({ length: 450 }).notNull(),
+  content: varchar({ length: 500 }).notNull(),
+  is_read: boolean().default(false).notNull(),
+  userId: text().notNull(),
+  userType: varchar({ length: 10 }).notNull(),
+  created_at: timestamp().defaultNow(),
+});
+
+export const laundryAlerts = pgTable("laundryAlerts", {
+  id: text().primaryKey(),
+  type: varchar({ length: 255 }).notNull(),
+  title: varchar({ length: 450 }).notNull(),
+  content: text().notNull(),
+  status: varchar({ length: 100 }).notNull(),
+  created_at: timestamp().defaultNow(),
+  readed_at: timestamp(),
 });
 
 const tables = {
