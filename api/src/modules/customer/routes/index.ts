@@ -10,6 +10,7 @@ import { getCustomerOrders } from "./get-customer-orders";
 import { customerSessionValidator } from "../session-validator";
 import { uploadCustomerProfileImage } from "./upload-profile-image";
 import { validateCustomerJWT } from "./validate-token";
+import { createNotificationForCustomer } from "./create-notification";
 
 const customerController = new Elysia()
   .use(postCustomer(appServices.customer))
@@ -17,6 +18,7 @@ const customerController = new Elysia()
   .use(listCustomers(appServices.customer))
   .use(getCustomer(appServices.customer))
   .use(validateCustomerJWT(appServices.customer))
+  .use(createNotificationForCustomer(appServices.notificationService))
   // routes with authentication
   .use(customerSessionValidator({ checkAuth: appServices.customer.checkAuth }))
   .use(deleteCustomer(appServices.customer))

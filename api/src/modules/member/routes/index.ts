@@ -8,6 +8,7 @@ import { listMembers } from "./list-members";
 import { deleteMember } from "./delete-member";
 import { getLaundriesByMember } from "./get-laundries-by-member";
 import { validateAuthToken } from "./validate-token";
+import { createNotificationForMember } from "./create-notification";
 
 const memberController = new Elysia()
   .use(validateAuthToken(appServices.member))
@@ -17,6 +18,7 @@ const memberController = new Elysia()
   .use(createEmployeeMember(appServices.member))
   .use(listMembers(appServices.member))
   .use(deleteMember(appServices.member))
-  .use(getLaundriesByMember(appServices.laundry));
+  .use(getLaundriesByMember(appServices.laundry))
+  .use(createNotificationForMember(appServices.notificationService))
 
 export { memberController };
