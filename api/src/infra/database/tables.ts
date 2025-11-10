@@ -1,3 +1,4 @@
+import { NotificationMetadata } from "@/types/notification-data";
 import { randomUUIDv7 } from "bun";
 import {
   text,
@@ -5,11 +6,10 @@ import {
   varchar,
   integer,
   numeric,
-  char,
   boolean,
   timestamp,
   date,
-  json,
+  jsonb,
 } from "drizzle-orm/pg-core";
 
 export const laundry = pgTable("laundries", {
@@ -160,7 +160,7 @@ export const notifications = pgTable("notifications", {
   type: varchar({ length: 100 }).notNull(),
   title: varchar({ length: 450 }).notNull(),
   content: varchar({ length: 500 }).notNull(),
-  metadata: json(),
+  metadata: jsonb("metadata").$type<NotificationMetadata>(),
   status: varchar({ length: 10 }).notNull(),
   userId: text().notNull(),
   userType: varchar({ length: 10 }).notNull(),
