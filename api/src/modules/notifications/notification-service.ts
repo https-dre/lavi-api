@@ -8,7 +8,7 @@ import {
 
 type NotificationNotCreated_t = Omit<
   NotificationDTO,
-  "id" | "created_at" | "userType" | "status"
+  "id" | "created_at" | "userType" | "status" | "userId"
 >;
 
 enum notificationStatus {
@@ -35,6 +35,7 @@ export class NotificationService {
       ...data,
       userType: "member",
       status: "unread",
+      userId: memberId
     });
     return created;
   }
@@ -50,6 +51,7 @@ export class NotificationService {
       ...data,
       userType: "customer",
       status: "unread",
+      userId: customerId
     });
     return created;
   }
