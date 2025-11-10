@@ -10,6 +10,7 @@ import { uploadLaundryProfileImage } from "./upload-laundry-image";
 import { listLaundryBanners } from "./list-laundry-banners";
 import { uploadLaundryBanner } from "./upload-banner";
 import { deleteLaundryBanner } from "./delete-banner";
+import { listLaundries } from "./list-all";
 
 const laundryController = new Elysia()
   .use(createLaundry(appServices.laundry))
@@ -17,6 +18,7 @@ const laundryController = new Elysia()
   .use(updateLaundry(appServices.laundry))
   .use(getLaundry(appServices.laundry))
   .use(searchLaundriesByName(appServices.laundry))
+  .use(listLaundries(appServices.laundry))
   .use(listOrders(appServices.order))
   .use(uploadLaundryProfileImage(appServices.mediaService))
   .use(listLaundryBanners(appServices.mediaService))

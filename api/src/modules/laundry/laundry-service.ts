@@ -152,4 +152,9 @@ export class LaundryService {
     const dto = _.pick(model, dtoKeys);
     return dto;
   }
+
+  public async listLaundries(): Promise<LaundryDTO[]> {
+    const laundries = await this.repository.listAll();
+    return laundries.map((l) => this.decryptLaundry(l))
+  }
 }
