@@ -2,29 +2,22 @@ import { db } from "@/infra/database/conn";
 import * as t from "@/infra/database/tables";
 import { FeedbackImageModel, FeedbackModel } from "@/types/models";
 import { IFeedbackRepository } from "@/types/repositories";
+import { FeedbackWithImages } from "@/types/return/feedback";
 import { randomUUIDv7 } from "bun";
 import { eq } from "drizzle-orm";
-
-type FeedbackWithImages = {
-  feedbackPost: typeof t.feedbackPost.$inferSelect;
-  feedbackImages: typeof t.feedbackImage.$inferSelect[];
-  customerName: string;
-  customerProfileUrl: string | null;
-}
 
 export class FeedbackRepository implements IFeedbackRepository {
   async findWithInnerJoin(
     laundryId: string,
     page: number = 1,
-    pageSize: number = 10
-  ) { 
-
+    pageSize: number = 10,
+  ) {
     const result = await db
       .select({
         post: t.feedbackPost,
         image: t.feedbackImage,
-        customerName: t.customer.name, 
-        customerProfileUrl: t.customer.profile_url
+        customerName: t.customer.name,
+        customerProfileUrl: t.customer.profile_url,
       })
       .from(t.feedbackPost)
       .where(eq(t.feedbackPost.laundryId, laundryId))
@@ -32,7 +25,6 @@ export class FeedbackRepository implements IFeedbackRepository {
       .offset((page - 1) * pageSize)
       .leftJoin(t.feedbackImage, eq(t.feedbackPost.id, t.feedbackImage.postId))
       .leftJoin(t.customer, eq(t.feedbackPost.customerId, t.customer.id));
-
 
     const groupedResults: Record<string, FeedbackWithImages> = {};
 
@@ -42,9 +34,9 @@ export class FeedbackRepository implements IFeedbackRepository {
       if (!groupedResults[postId]) {
         groupedResults[postId] = {
           feedbackPost: row.post,
-          customerName: row.customerName!, 
+          customerName: row.customerName!,
           customerProfileUrl: row.customerProfileUrl,
-          feedbackImages: []
+          feedbackImages: [],
         };
       }
       if (row.image) {
@@ -57,7 +49,7 @@ export class FeedbackRepository implements IFeedbackRepository {
   async findByCustomerId(
     customerId: string,
     page: number = 1,
-    pageSize: number = 10
+    pageSize: number = 10,
   ): Promise<FeedbackModel[]> {
     const offset = (page - 1) * pageSize;
     const result = await db
@@ -72,7 +64,7 @@ export class FeedbackRepository implements IFeedbackRepository {
   async findByLaundryId(
     customerId: string,
     page: number = 1,
-    pageSize: number = 10
+    pageSize: number = 10,
   ) {
     const offset = (page - 1) * pageSize;
     const result = await db
@@ -85,7 +77,7 @@ export class FeedbackRepository implements IFeedbackRepository {
   }
 
   async save(
-    data: Omit<FeedbackModel, "id" | "created_at">
+    data: Omit<FeedbackModel, "id" | "created_at">,
   ): Promise<FeedbackModel> {
     const saved = await db
       .insert(t.feedbackPost)
@@ -98,7 +90,7 @@ export class FeedbackRepository implements IFeedbackRepository {
   }
 
   async saveImages(
-    images: Omit<FeedbackImageModel, "id">[]
+    images: Omit<FeedbackImageModel, "id">[],
   ): Promise<FeedbackImageModel[]> {
     const saved = await db
       .insert(t.feedbackImage)
@@ -108,7 +100,7 @@ export class FeedbackRepository implements IFeedbackRepository {
             ...img,
             id: randomUUIDv7(),
           };
-        })
+        }),
       )
       .returning();
     return saved;

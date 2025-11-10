@@ -1,4 +1,5 @@
 import { BadResponse } from "@/infra/http/error-handler";
+import { CryptoProvider } from "@/infra/providers/crypto-provider";
 import { FeedbackDTO } from "@/types/dtos";
 import {
   ICustomerRepository,
@@ -10,11 +11,12 @@ export class FeedbackService {
   constructor(
     private repository: IFeedbackRepository,
     private laundryRepository: ILaundryRepository,
-    private customerRepository: ICustomerRepository
+    private customerRepository: ICustomerRepository,
+    private cryptoProvider: CryptoProvider,
   ) {}
 
   async saveFeedback(
-    data: Omit<FeedbackDTO, "id" | "created_at">
+    data: Omit<FeedbackDTO, "id" | "created_at">,
   ): Promise<FeedbackDTO> {
     if (!(await this.laundryRepository.findById(data.laundryId)))
       throw new BadResponse("Lavanderia não encontrada.", 404);
@@ -34,9 +36,16 @@ export class FeedbackService {
   async listFeedbacksByLaundryId(
     laundryId: string,
     page: number = 1,
-    pageSize: number = 10
+    pageSize: number = 10,
   ) {
-    const feedbacks = await this.repository.findWithInnerJoin(laundryId, page, pageSize);
-    return feedbacks;
+    const feedbacks = await this.repository.findWithInnerJoin(
+      laundryId,
+      page,
+      pageSize,
+    );
+    return feedbacks.map((f) => ({
+      ...f,
+      customerName: this.cryptoProvider.decrypt(f.customerName),
+    }));
   }
 }

@@ -70,8 +70,13 @@ const appServices = {
     feedbackRepository,
     laundryRepository,
     customerRepository,
+    cryptoProvider,
   ),
-  notificationService: new NotificationService(notificationRepository, memberRepository, customerRepository)
+  notificationService: new NotificationService(
+    notificationRepository,
+    memberRepository,
+    customerRepository,
+  ),
 };
 
 export { appServices };

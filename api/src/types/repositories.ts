@@ -10,6 +10,7 @@ import {
   FeedbackImageModel,
   FeedbackModel,
 } from "./models";
+import { FeedbackWithImages } from "./return/feedback";
 
 export interface ICustomerRepository {
   save(data: Omit<CustomerModel, "id">): Promise<CustomerModel>;
@@ -120,7 +121,7 @@ export interface IFeedbackRepository {
     laundryId: string,
     page?: number,
     pageSize?: number,
-  ): Promise<any>;
+  ): Promise<FeedbackWithImages[]>;
   findByLaundryId(
     laundryId: string,
     page: number,
