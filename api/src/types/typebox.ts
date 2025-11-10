@@ -126,6 +126,7 @@ const status_t = Type.Union([
 export const NotificationType = Type.Object({
   id: Type.String({ format: "uuid" }),
   type: Type.String({ maxLength: 100 }),
+  metadata: Type.Union([Type.String(), Type.Null()]),
   title: Type.String({ maxLength: 450 }),
   content: Type.String({ maxLength: 500 }),
   status: Type.String({ maxLength: 10 }),
