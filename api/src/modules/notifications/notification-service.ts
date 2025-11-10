@@ -65,12 +65,33 @@ export class NotificationService {
     await this.repository.deleteWithUserId(userId);
   }
 
+  private async validateUser(userId: string, type: string) {
+    if (type == "customer") {
+      if (!(await this.customerRepository.findById(userId)))
+        throw new BadResponse("Cliente não encontrado.", 404);
+
+      return;
+    }
+
+    if (!(await this.memberRepository.findById(userId)))
+      throw new BadResponse("Membro não encontrado.", 404);
+  }
+
   public async listNotifications(
     userId: string,
+    userType: "customer" | "member",
     page: number = 1,
     pageSize: number = 10,
     status?: string,
   ) {
-    
+    await this.validateUser(userId, userType);
+    const notifications = await this.repository.listNotifications(
+      userId,
+      userType,
+      page,
+      pageSize,
+      status,
+    );
+    return notifications;
   }
 }

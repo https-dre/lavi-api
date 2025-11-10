@@ -9,6 +9,7 @@ import {
   boolean,
   timestamp,
   date,
+  json,
 } from "drizzle-orm/pg-core";
 
 export const laundry = pgTable("laundries", {
@@ -159,6 +160,7 @@ export const notifications = pgTable("notifications", {
   type: varchar({ length: 100 }).notNull(),
   title: varchar({ length: 450 }).notNull(),
   content: varchar({ length: 500 }).notNull(),
+  metadata: json(),
   status: varchar({ length: 10 }).notNull(),
   userId: text().notNull(),
   userType: varchar({ length: 10 }).notNull(),
