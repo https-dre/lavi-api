@@ -18,7 +18,7 @@ export const createNotificationForMember = (service: NotificationService) => {
     {
       detail: {
         summary: "Create notification",
-        tags: ["customer"],
+        tags: ["members"],
       },
       body: t.Object({
         notification: t.Omit(NotificationType, [
