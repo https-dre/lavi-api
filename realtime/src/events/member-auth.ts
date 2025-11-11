@@ -23,9 +23,9 @@ export const addMemberAuth = (socket: Socket) => {
       // Create an channel for each laundry
       const laundries = await fetchMemberLaundries(socket.data.id);
       if (laundries != null && laundries.length > 0) {
-        laundries.forEach(l => {
-          socket.join(`laundry:${l.id}`)
-        })
+        laundries.forEach((l) => {
+          socket.join(`laundry:${l.id}`);
+        });
       }
 
       socket.emit("notification", {
