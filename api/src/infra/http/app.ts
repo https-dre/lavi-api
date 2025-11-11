@@ -9,6 +9,7 @@ import { orderController } from "@/modules/order/routes";
 import { catalogController } from "@/modules/catalog-item/routes";
 import { s3Api } from "./s3-api";
 import { feedbackController } from "@/modules/feedback/routes";
+import { notificationController } from "@/modules/notifications/routes";
 
 export const App = new Elysia()
   .use(
@@ -48,4 +49,5 @@ export const App = new Elysia()
   .use(catalogController)
   .use(orderController)
   .use(feedbackController)
+  .use(notificationController)
   .use(s3Api);

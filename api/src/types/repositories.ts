@@ -1,4 +1,3 @@
-import { NotificationDTO } from "./dtos";
 import {
   CustomerModel,
   LaundryModel,
@@ -9,6 +8,7 @@ import {
   CatalogItemModel,
   FeedbackImageModel,
   FeedbackModel,
+  NotificationModel
 } from "./models";
 import { FeedbackWithImages } from "./return/feedback";
 
@@ -137,14 +137,15 @@ export interface IFeedbackRepository {
 
 export interface INotificationRepository {
   save(
-    data: Omit<NotificationDTO, "id" | "created_at">,
-  ): Promise<NotificationDTO>;
+    data: Omit<NotificationModel, "id" | "created_at">,
+  ): Promise<NotificationModel>;
   delete(id: string): Promise<void>;
   findByUserId(
     userId: string,
     page?: number,
     pageSize?: number,
-  ): Promise<NotificationDTO[]>;
+    status?: string
+  ): Promise<NotificationModel[]>;
   deleteWithUserId(userId: string): Promise<void>;
   listNotifications(
     userId: string,
@@ -152,9 +153,9 @@ export interface INotificationRepository {
     page?: number,
     pageSize?: number,
     status?: string,
-  ): Promise<NotificationDTO[]>;
+  ): Promise<NotificationModel[]>;
   updateNotification(
     notificationId: string,
-    fields: Partial<Omit<NotificationDTO, "id" | "created_at" | "userType">>,
+    fields: Partial<Omit<NotificationModel, "id" | "created_at" | "userType">>,
   ): Promise<void>;
 }

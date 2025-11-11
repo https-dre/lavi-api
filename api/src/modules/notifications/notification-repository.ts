@@ -7,7 +7,7 @@ import { and, desc, eq } from "drizzle-orm";
 
 export class NotificationRepository implements INotificationRepository {
   public async save(
-    data: Omit<NotificationDTO, "id" | "created_at">,
+    data: Omit<NotificationDTO, "id" | "created_at">
   ): Promise<NotificationDTO> {
     const created = await db
       .insert(t.notifications)
@@ -23,11 +23,20 @@ export class NotificationRepository implements INotificationRepository {
     userId: string,
     page: number = 1,
     pageSize: number = 10,
+    status?: string
   ): Promise<NotificationDTO[]> {
     const notifications = await db
       .select()
       .from(t.notifications)
-      .where(eq(t.notifications.userId, userId))
+      .where(
+        status
+          ? and(
+              eq(t.notifications.userId, userId),
+              eq(t.notifications.status, status)
+            )
+          : eq(t.notifications.userId, userId)
+      )
+      .orderBy(desc(t.notifications.created_at))
       .limit(pageSize)
       .offset((page - 1) * pageSize);
     return notifications;
@@ -46,7 +55,7 @@ export class NotificationRepository implements INotificationRepository {
     userType: "customer" | "member",
     page: number = 1,
     pageSize: number = 10,
-    status?: string,
+    status?: string
   ): Promise<NotificationDTO[]> {
     const result = await db
       .select()
@@ -55,8 +64,8 @@ export class NotificationRepository implements INotificationRepository {
         and(
           eq(t.notifications.userType, userType),
           eq(t.notifications.userId, userId),
-          status ? eq(t.notifications.status, status) : undefined,
-        ),
+          status ? eq(t.notifications.status, status) : undefined
+        )
       )
       .orderBy(desc(t.notifications.created_at))
       .limit(pageSize)
@@ -66,7 +75,7 @@ export class NotificationRepository implements INotificationRepository {
 
   public async updateNotification(
     notificationId: string,
-    fields: Partial<Omit<NotificationDTO, "id" | "created_at" | "userType">>,
+    fields: Partial<Omit<NotificationDTO, "id" | "created_at" | "userType">>
   ): Promise<void> {
     await db
       .update(t.notifications)
