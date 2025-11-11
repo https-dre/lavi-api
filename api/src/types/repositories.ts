@@ -8,7 +8,7 @@ import {
   CatalogItemModel,
   FeedbackImageModel,
   FeedbackModel,
-  NotificationModel
+  NotificationModel,
 } from "./models";
 import { FeedbackWithImages } from "./return/feedback";
 
@@ -19,7 +19,7 @@ export interface ICustomerRepository {
   findById(id: string): Promise<CustomerModel>;
   update(
     updates: Partial<Omit<CustomerModel, "id">>,
-    id: string,
+    id: string
   ): Promise<void>;
   findByDoc(doc: string): Promise<CustomerModel>;
   listAllIds(): Promise<{ id: string }[]>;
@@ -47,7 +47,7 @@ export interface IMemberRepository {
   deleteById(id: string): Promise<void>;
   updateFields(
     id: string,
-    fields: Partial<Omit<MemberModel, "id" | "created_at">>,
+    fields: Partial<Omit<MemberModel, "id" | "created_at">>
   ): void;
   pushMemberToLaundry(memberId: string, laundryId: string): Promise<void>;
   popMemberLaundry(memberId: string, laundryId: string): Promise<void>;
@@ -62,27 +62,27 @@ export interface ILaundryBannerRepository {
 
 export interface IOrderRepository {
   create(
-    data: Omit<OrderModel, "id" | "created_at" | "updated_at">,
+    data: Omit<OrderModel, "id" | "created_at" | "updated_at">
   ): Promise<OrderModel>;
   delete(orderId: string): Promise<void>;
   findByCustomerId(id: string): Promise<OrderModel[]>;
   findByCustomerIdWithCursorIndex(
     id: string,
-    cursor: Date,
+    cursor: Date
   ): Promise<OrderModel[]>;
   findById(id: string): Promise<OrderModel>;
   findByCustomerIdWithDateInterval(
     id: string,
     startDate: Date,
-    endDate: Date,
+    endDate: Date
   ): Promise<OrderModel[]>;
   findByCustomerIdAndStatus(
     customerId: string,
-    status: string,
+    status: string
   ): Promise<OrderModel[]>;
   pushOrderItem(item: Omit<OrderItemModel, "id">): Promise<OrderItemModel>;
   pushManyOrderItems(
-    items: Omit<OrderItemModel, "id">[],
+    items: Omit<OrderItemModel, "id">[]
   ): Promise<OrderItemModel[]>;
   deleteOrderItem(itemId: string): Promise<void>;
   deleteAllItemsFromOrder(id: string): Promise<void>;
@@ -90,12 +90,12 @@ export interface IOrderRepository {
   findOrderItemById(id: string): Promise<OrderItemModel>;
   updateFields(
     orderId: string,
-    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>,
+    fields: Partial<Omit<OrderModel, "id" | "created_at" | "updated_at">>
   ): Promise<void>;
   findByLaundryId(
     laundryId: string,
     page?: number,
-    pageSize?: number,
+    pageSize?: number
   ): Promise<OrderModel[]>;
 }
 
@@ -105,7 +105,7 @@ export interface ICatalogItemRepository {
   deleteById(id: string): Promise<void>;
   updateById(
     id: string,
-    fieldsUpdated: Partial<Omit<CatalogItemModel, "id">>,
+    fieldsUpdated: Partial<Omit<CatalogItemModel, "id">>
   ): Promise<void>;
   findByLaundryId(laundryId: string): Promise<CatalogItemModel[]>;
 }
@@ -114,30 +114,30 @@ export interface IFeedbackRepository {
   save(data: Omit<FeedbackModel, "id" | "created_at">): Promise<FeedbackModel>;
   deleteById(id: string): Promise<void>;
   saveImages(
-    images: Omit<FeedbackImageModel, "id">[],
+    images: Omit<FeedbackImageModel, "id">[]
   ): Promise<FeedbackImageModel[]>;
   deleteImage(key: string): Promise<void>;
   findWithInnerJoin(
     laundryId: string,
     page?: number,
-    pageSize?: number,
+    pageSize?: number
   ): Promise<FeedbackWithImages[]>;
   findByLaundryId(
     laundryId: string,
     page: number,
-    pageSize: number,
+    pageSize: number
   ): Promise<any>;
   findByCustomerId(
     customerId: string,
     page: number,
-    pageSize: number,
+    pageSize: number
   ): Promise<FeedbackModel[]>;
   findById(id: string): Promise<FeedbackModel>;
 }
 
 export interface INotificationRepository {
   save(
-    data: Omit<NotificationModel, "id" | "created_at">,
+    data: Omit<NotificationModel, "id" | "created_at">
   ): Promise<NotificationModel>;
   delete(id: string): Promise<void>;
   findByUserId(
@@ -152,10 +152,14 @@ export interface INotificationRepository {
     userType: "customer" | "member",
     page?: number,
     pageSize?: number,
-    status?: string,
+    status?: string
   ): Promise<NotificationModel[]>;
   updateNotification(
     notificationId: string,
-    fields: Partial<Omit<NotificationModel, "id" | "created_at" | "userType">>,
+    fields: Partial<Omit<NotificationModel, "id" | "created_at" | "userType">>
   ): Promise<void>;
+  selectByUserIdAndStatus(
+    userId: string,
+    status: string
+  ): Promise<NotificationModel[]>;
 }

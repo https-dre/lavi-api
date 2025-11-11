@@ -10,3 +10,9 @@ export type NotificationMetadata =
   | OrderNotification
   | NewCommentData
   | { [key: string]: any };
+
+export enum NotificationStatus {
+  UNREAD = "unread",
+  NOT_SENT = "not-sent",
+  READED = "readed",
+}

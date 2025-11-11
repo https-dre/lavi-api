@@ -1,5 +1,6 @@
 import { BadResponse } from "@/infra/http/error-handler";
 import { NotificationDTO } from "@/types/dtos";
+import { NotificationStatus } from "@/types/notification-data";
 import {
   ICustomerRepository,
   IMemberRepository,
@@ -10,12 +11,6 @@ type NotificationNotCreated_t = Omit<
   NotificationDTO,
   "id" | "created_at" | "userType" | "status" | "userId"
 >;
-
-enum notificationStatus {
-  UNREAD = "unread",
-  SENT = "sent",
-  READED = "readed",
-}
 
 export class NotificationService {
   constructor(
@@ -58,7 +53,7 @@ export class NotificationService {
 
   public async updateNotificationStatus(
     notificationId: string,
-    status: notificationStatus
+    status: "not-sent" | "unread" | "readed"
   ) {
     await this.repository.updateNotification(notificationId, { status });
   }
@@ -110,5 +105,12 @@ export class NotificationService {
       status
     );
     return notifications;
+  }
+
+  public async getNotSentNotifications(userId: string) {
+    return await this.repository.selectByUserIdAndStatus(
+      userId,
+      NotificationStatus.NOT_SENT
+    );
   }
 }

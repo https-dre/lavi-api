@@ -4,6 +4,7 @@ import { INotificationRepository } from "@/types/repositories";
 import * as t from "@/infra/database/tables";
 import { randomUUIDv7 } from "bun";
 import { and, desc, eq } from "drizzle-orm";
+import { NotificationModel } from "@/types/models";
 
 export class NotificationRepository implements INotificationRepository {
   public async save(
@@ -81,5 +82,21 @@ export class NotificationRepository implements INotificationRepository {
       .update(t.notifications)
       .set(fields)
       .where(eq(t.notifications.id, notificationId));
+  }
+
+  public async selectByUserIdAndStatus(
+    userId: string,
+    status: string
+  ): Promise<NotificationModel[]> {
+    return await db
+      .select()
+      .from(t.notifications)
+      .where(
+        and(
+          eq(t.notifications.userId, userId),
+          eq(t.notifications.status, status)
+        )
+      )
+      .orderBy(desc(t.notifications.created_at));
   }
 }
