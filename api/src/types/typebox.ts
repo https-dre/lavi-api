@@ -24,6 +24,7 @@ export const CustomerType = Type.Object({
   email: Type.String(),
   is_pj: Type.Boolean(),
   doc: Type.String(),
+  cep: Type.String(),
   birth_date: DateString,
   gender: Type.String(),
   password: Type.String(),
