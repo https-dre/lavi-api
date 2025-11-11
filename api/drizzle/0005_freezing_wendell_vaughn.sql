@@ -1,0 +1,1 @@
+ALTER TABLE "customers" ADD COLUMN "cep" text DEFAULT 'null' NOT NULL;

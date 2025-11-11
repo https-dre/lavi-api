@@ -89,6 +89,7 @@ export const customer = pgTable("customers", {
   is_pj: boolean().default(false).notNull(),
   doc_blind_index: text().notNull().unique(),
   doc: text().notNull(),
+  cep: text().notNull().default("null"),
   birth_date: date().notNull(),
   gender: text().notNull(),
   password: text().notNull(),

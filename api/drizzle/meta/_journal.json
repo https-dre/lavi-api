@@ -36,6 +36,13 @@
       "when": 1762809102710,
       "tag": "0004_broken_nico_minoru",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1762878643479,
+      "tag": "0005_freezing_wendell_vaughn",
+      "breakpoints": true
     }
   ]
 }
