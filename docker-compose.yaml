@@ -28,7 +28,7 @@ services:
     build:
       context: ./realtime
     environment:
-      - API_ADDR=api
+      - API_ADDR=http://api
       - REDIS_HOST=redis
       - REDIS_PORT=${REDIS_PORT}
     depends_on:
