@@ -19,3 +19,5 @@ export type FeedbackImageModel = typeof tables.feedbackImage.$inferSelect;
 export type MemberModel = typeof tables.member.$inferSelect;
 
 export type CatalogItemModel = typeof tables.laundryCatalogItem.$inferSelect;
+
+export type NotificationModel = typeof tables.notifications.$inferSelect;
