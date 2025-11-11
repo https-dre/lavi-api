@@ -9,7 +9,7 @@ import {
 
 type NotificationNotCreated_t = Omit<
   NotificationDTO,
-  "id" | "created_at" | "userType" | "status" | "userId"
+  "id" | "created_at" | "userType" | "userId"
 >;
 
 export class NotificationService {
@@ -29,7 +29,6 @@ export class NotificationService {
     const created = await this.repository.save({
       ...data,
       userType: "member",
-      status: "unread",
       userId: memberId,
     });
     return created;
@@ -45,7 +44,6 @@ export class NotificationService {
     const created = await this.repository.save({
       ...data,
       userType: "customer",
-      status: "unread",
       userId: customerId,
     });
     return created;

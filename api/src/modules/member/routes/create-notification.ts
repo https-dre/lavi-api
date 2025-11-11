@@ -25,7 +25,6 @@ export const createNotificationForMember = (service: NotificationService) => {
           "id",
           "created_at",
           "userType",
-          "status",
           "userId",
         ]),
       }),

@@ -25,7 +25,6 @@ export const createNotificationForCustomer = (service: NotificationService) => {
           "id",
           "created_at",
           "userType",
-          "status",
           "userId",
         ]),
       }),
