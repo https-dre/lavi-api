@@ -113,6 +113,8 @@ export const order = pgTable("orders", {
   details: text().notNull(),
   latitude: numeric().notNull(),
   longitude: numeric().notNull(),
+  total_inCents: integer().default(0),
+  close_at: timestamp(),
   laundryId: text()
     .references(() => laundry.id, { onDelete: "set null" })
     .notNull(),
