@@ -1,19 +1,17 @@
 import JWT from "jsonwebtoken";
 import { CustomerDTO } from "@/types/dtos";
 import { BadResponse } from "@/infra/http/error-handler";
-import {
-  CryptoProvider,
-  JwtProvider,
-} from "@/infra/providers/crypto-provider";
+import { CryptoProvider, JwtProvider } from "@/infra/providers/crypto-provider";
 import { ICustomerRepository } from "@/types/repositories";
 import { IdentityService } from "@/generators/identity-service";
 import { CustomerModel } from "@/types/models";
-import { remove_sensitive_fields } from "@/functions/remove-sensitive-fields";
 import { CustomerType } from "@/types/typebox";
 import _ from "lodash";
-import { TObject } from "@sinclair/typebox";
 import { S3Provider } from "@/infra/providers/S3Provider";
 import { randomUUID } from "node:crypto";
+
+const CustomerSensitiveFields = ["name", "email", "address", "cep", "doc"];
+const CustomerBlindFields = ["email", "doc"];
 
 export class CustomerService {
   constructor(
@@ -21,7 +19,7 @@ export class CustomerService {
     readonly crypto: CryptoProvider,
     readonly jwt: JwtProvider,
     readonly identityService: IdentityService,
-    private objectStorage: S3Provider,
+    private objectStorage: S3Provider
   ) {}
 
   public validateFields(customer: Omit<CustomerDTO, "id" | "created_at">) {
@@ -30,7 +28,7 @@ export class CustomerService {
   }
 
   public async createCustomer(
-    customer: Omit<CustomerDTO, "id" | "created_at">,
+    customer: Omit<CustomerDTO, "id" | "created_at">
   ) {
     const email_index = this.crypto.hmac(customer.email);
     if (await this.repository.findByEmail(email_index)) {
@@ -53,6 +51,7 @@ export class CustomerService {
       email: this.crypto.encrypt(customer.email),
       doc_blind_index: doc_index,
       doc: this.crypto.encrypt(customer.doc),
+      cep: this.crypto.encrypt(customer.cep),
       name: this.crypto.encrypt(customer.name!),
       password: this.crypto.hashPassword(customer.password!),
       created_at: new Date(),
@@ -86,7 +85,7 @@ export class CustomerService {
    */
   public async authCustomer(email: string, password: string): Promise<string> {
     const customerFounded = await this.repository.findByEmail(
-      this.crypto.hmac(email),
+      this.crypto.hmac(email)
     );
     if (
       !customerFounded ||
@@ -106,16 +105,15 @@ export class CustomerService {
 
     const updatePayload: Record<string, any> = {};
     for (const key of Object.keys(fields)) {
-      if (["email", "doc"].includes(key)) {
-        updatePayload[`${key}_blind_index`] = this.crypto.hmac(fields[key]);
-        updatePayload[key] = this.crypto.encrypt(fields[key]);
-        continue;
+      const value = fields[key];
+      if (CustomerBlindFields.includes(key)) {
+        updatePayload[`${key}_blind_index`] = this.crypto.hmac(value);
       }
-      if (key == "address") {
-        updatePayload[key] = this.crypto.encrypt(fields[key]);
-        continue;
+      if (CustomerSensitiveFields.includes(key)) {
+        updatePayload[key] = this.crypto.encrypt(value);
+      } else {
+        updatePayload[key] = value;
       }
-      updatePayload[key] = fields[key];
     }
 
     await this.repository.update(updatePayload, id);
@@ -149,18 +147,16 @@ export class CustomerService {
   }
 
   public decryptCustomer(c: CustomerModel): CustomerDTO {
-    const decrypted_customer = this.crypto.decryptEntity(c, [
-      "email",
-      "doc",
-      "name",
-      "address",
-    ]);
+    const decrypted_customer = this.crypto.decryptEntity(
+      c,
+      CustomerSensitiveFields
+    );
     return this.adaptModel(decrypted_customer);
   }
 
   adaptModel(c: CustomerModel): CustomerDTO {
     const dtoKeys = Object.keys(
-      CustomerType.properties,
+      CustomerType.properties
     ) as (keyof CustomerDTO)[];
     const dto = _.pick(c, dtoKeys);
     return dto;
@@ -169,7 +165,7 @@ export class CustomerService {
   async uploadCustomerProfileImage(
     customerId: string,
     arrayBuffer: ArrayBuffer,
-    fileType: string,
+    fileType: string
   ) {
     const customer = await this.repository.findById(customerId);
     if (!customer) {
@@ -203,7 +199,7 @@ export class CustomerService {
           message: "Erro no upload do arquivo",
           err: "Arquivo não encontrado no S3",
         },
-        500,
+        500
       );
     }
     await this.repository.update({ profile_url: fileUploaded.url }, customerId);
