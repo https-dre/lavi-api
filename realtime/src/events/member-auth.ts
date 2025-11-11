@@ -26,6 +26,7 @@ export const addMemberAuth = (socket: Socket) => {
         laundries.forEach((l) => {
           socket.join(`laundry:${l.id}`);
         });
+        return;
       }
 
       socket.emit("notification", {
