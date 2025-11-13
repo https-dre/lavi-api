@@ -16,6 +16,16 @@ const DateString = Type.String({
   examples: ["2007-05-02"],
 });
 
+const DateISO_String = Type.Transform(
+  Type.String({
+    format: "date-time",
+    description: "Date with format ISO 8601",
+    default: "2025-09-18T19:35:25.102Z",
+  })
+)
+  .Decode((value) => new Date(value))
+  .Encode((value) => value.toISOString());
+
 export const CustomerType = Type.Object({
   id: Type.String(),
   profile_url: Type.Union([Type.String(), Type.Null()]),
@@ -71,7 +81,7 @@ export const OrderType = Type.Object({
   id: Type.String(),
   created_at: DateISO,
   updated_at: Type.Union([DateISO, Type.Null()]),
-  close_at: Type.Union([DateISO, Type.Null()]),
+  close_at: Type.Union([DateISO_String, Type.Null()]),
   details: Type.String(),
   status: Type.String(),
   delivery_type: Type.String(),
