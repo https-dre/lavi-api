@@ -1,0 +1,1 @@
+ALTER TABLE "chat_messages" RENAME COLUMN "sended_at" TO "created_at";
