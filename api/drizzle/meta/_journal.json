@@ -50,6 +50,13 @@
       "when": 1762904399339,
       "tag": "0006_orange_marvel_apes",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1763673537497,
+      "tag": "0007_burly_tusk",
+      "breakpoints": true
     }
   ]
 }
