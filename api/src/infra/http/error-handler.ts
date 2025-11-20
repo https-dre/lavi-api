@@ -1,5 +1,3 @@
-import { logger } from "../logger";
-
 export class BadResponse extends Error {
   public response: string | object;
   public status: number;

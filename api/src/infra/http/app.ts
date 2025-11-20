@@ -23,7 +23,7 @@ export const App = new Elysia()
       scalar: {
         url: "/openapi/json",
       },
-    }),
+    })
   )
   .error({
     BadResponse,
@@ -32,8 +32,11 @@ export const App = new Elysia()
     switch (code) {
       case "BadResponse":
         return status(error.status, error.response);
+      case "VALIDATION":
+        return status(400, { error });
+      case "INVALID_FILE_TYPE":
+        return status(400, { details: "Invalid File Type", error });
       default:
-        console.log(error);
         return status(500, {
           details: "Internal server error",
           alert: "Contact the admin!",

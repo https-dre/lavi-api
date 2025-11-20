@@ -22,5 +22,9 @@ export const chatMessage = pgTable("chat_messages", {
     .$defaultFn(() => randomUUIDv7()),
   sender_type: varchar({ length: 10 }).notNull().$type<"member" | "customer">(),
   content: text().notNull(),
+  status: text().notNull().$type<"sent" | "delivered" | "read" | "failed">(),
+  chat_id: text()
+    .notNull()
+    .references(() => chat.id, { onDelete: "cascade" }),
   created_at: timestamp().defaultNow(),
 });
