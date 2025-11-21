@@ -71,6 +71,13 @@
       "when": 1763677730551,
       "tag": "0009_mature_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1763763166880,
+      "tag": "0010_majestic_fat_cobra",
+      "breakpoints": true
     }
   ]
 }
