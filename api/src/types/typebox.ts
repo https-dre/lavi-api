@@ -147,3 +147,11 @@ export const NotificationType = Type.Object({
   userType: Type.String({ maxLength: 10 }),
   created_at: Type.Union([DateISO, Type.Null()]),
 });
+
+export const ChatType = Type.Object({
+  id: Type.String({ format: "uuid" }),
+  laundryId: Type.String({ format: "uuid" }),
+  customerId: Type.String({ format: "uuid" }),
+  memberId: Type.Union([Type.String(), Type.Null()]),
+  created_at: Type.Union([DateISO, Type.Null()]),
+});

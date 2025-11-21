@@ -21,3 +21,15 @@ export type MemberModel = typeof tables.member.$inferSelect;
 export type CatalogItemModel = typeof tables.laundryCatalogItem.$inferSelect;
 
 export type NotificationModel = typeof tables.notifications.$inferSelect;
+
+export type ChatModel = typeof tables.chat.$inferSelect;
+
+export type AllChatData = {
+  id: string;
+  customer_name: string;
+  laundry_name: string;
+  customer_profileUrl: string | null;
+  laundry_profileUrl: string | null;
+  customerId: string;
+  laundryId: string;
+}
