@@ -17,6 +17,8 @@ import { FeedbackService } from "@/modules/feedback/feedback-service";
 import { FeedbackRepository } from "@/modules/feedback/feedback-repository";
 import { NotificationRepository } from "@/modules/notifications/notification-repository";
 import { NotificationService } from "@/modules/notifications/notification-service";
+import { ChatRepository } from "@/modules/chat/chat-repository";
+import { ChatService } from "@/modules/chat/chat-service";
 
 const customerRepository = new CustomerRepository();
 const orderRepository = new OrderRepository();
@@ -26,13 +28,14 @@ const memberRepository = new MemberRepository();
 const catalogRepository = new CatalogRepository();
 const feedbackRepository = new FeedbackRepository();
 const notificationRepository = new NotificationRepository();
+const chatRepository = new ChatRepository();
 
 const cryptoProvider = new CryptoProvider();
 const jwtProvider = new JwtProvider();
 
 const identityService = new IdentityService(
   customerRepository,
-  memberRepository,
+  memberRepository
 );
 
 const objectStorage = new S3Provider(Bun.env.BUCKET_NAME!);
@@ -44,19 +47,19 @@ const appServices = {
     cryptoProvider,
     jwtProvider,
     identityService,
-    objectStorage,
+    objectStorage
   ),
   order: new OrderService(
     orderRepository,
     customerRepository,
-    laundryRepository,
+    laundryRepository
   ),
   laundry: new LaundryService(laundryRepository, memberRepository),
   member: new MemberService(
     memberRepository,
     laundryRepository,
     jwtProvider,
-    cryptoProvider,
+    cryptoProvider
   ),
   catalogService: new CatalogItemService(catalogRepository, laundryRepository),
   mediaService: new MediaService(objectStorage, {
@@ -70,12 +73,18 @@ const appServices = {
     feedbackRepository,
     laundryRepository,
     customerRepository,
-    cryptoProvider,
+    cryptoProvider
   ),
   notificationService: new NotificationService(
     notificationRepository,
     memberRepository,
+    customerRepository
+  ),
+  chat: new ChatService(
+    chatRepository,
     customerRepository,
+    laundryRepository,
+    memberRepository
   ),
 };
 

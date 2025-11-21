@@ -10,6 +10,7 @@ import { catalogController } from "@/modules/catalog-item/routes";
 import { s3Api } from "./s3-api";
 import { feedbackController } from "@/modules/feedback/routes";
 import { notificationController } from "@/modules/notifications/routes";
+import { chatController } from "@/modules/chat/routes";
 
 export const App = new Elysia()
   .use(
@@ -53,4 +54,5 @@ export const App = new Elysia()
   .use(orderController)
   .use(feedbackController)
   .use(notificationController)
+  .use(chatController)
   .use(s3Api);
