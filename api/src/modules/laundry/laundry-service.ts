@@ -1,14 +1,12 @@
 import { LaundryDTO } from "@/types/dtos";
 import { BadResponse } from "@/infra/http/error-handler";
 import { LaundryModel } from "@/types/models";
-import {
-  CryptoProvider,
-  JwtProvider,
-} from "@/infra/providers/crypto-provider";
+import { CryptoProvider, JwtProvider } from "@/infra/providers/crypto-provider";
 import { ILaundryRepository, IMemberRepository } from "@/types/repositories";
 import { LaundryType } from "@/types/typebox";
 import _ from "lodash";
 import { generateSlug } from "@/functions/generate-slug";
+import { getAllLaundries } from "./static/list-laundries";
 
 const Laundry_SensitiveFields = [
   "account_number",
@@ -29,7 +27,7 @@ export class LaundryService {
   private crypto: CryptoProvider;
   constructor(
     private repository: ILaundryRepository,
-    private memberRepository: IMemberRepository,
+    private memberRepository: IMemberRepository
   ) {
     this.jwt = new JwtProvider();
     this.crypto = new CryptoProvider();
@@ -37,7 +35,7 @@ export class LaundryService {
 
   async save(
     ownerId: string,
-    laundry: Omit<LaundryDTO, "id" | "created_at" | "putEmployeeCode">,
+    laundry: Omit<LaundryDTO, "id" | "created_at" | "putEmployeeCode">
   ) {
     const cnpj_index = this.crypto.hmac(laundry.cnpj!);
     const laundryFounded = await this.repository.findByCNPJ(cnpj_index);
@@ -93,17 +91,9 @@ export class LaundryService {
     return laundries.map((l) => this.decryptLaundry(l));
   }
 
-  decryptLaundry(l: LaundryModel): LaundryDTO {
-    const decrypted_laundry = this.crypto.decryptEntity(
-      l,
-      Laundry_SensitiveFields,
-    );
-    return this.adaptModel(decrypted_laundry);
-  }
-
   async updateLaundryFields(
     laundryId: string,
-    updatedFields: Partial<LaundryUpdate_Fields>,
+    updatedFields: Partial<LaundryUpdate_Fields>
   ) {
     const laundryExists = await this.repository.findById(laundryId);
     if (!laundryExists) {
@@ -147,14 +137,24 @@ export class LaundryService {
     return searchResult.map((e) => this.decryptLaundry(e));
   }
 
-  adaptModel(model: LaundryModel): LaundryDTO {
+  public decryptLaundry(l: LaundryModel): LaundryDTO {
+    const decrypted_laundry = this.crypto.decryptEntity(
+      l,
+      Laundry_SensitiveFields
+    );
+    return this.adaptModel(decrypted_laundry);
+  }
+
+  public adaptModel(model: LaundryModel): LaundryDTO {
     const dtoKeys = Object.keys(LaundryType.properties) as (keyof LaundryDTO)[];
     const dto = _.pick(model, dtoKeys);
     return dto;
   }
 
-  public async listLaundries(): Promise<LaundryDTO[]> {
-    const laundries = await this.repository.listAll();
-    return laundries.map((l) => this.decryptLaundry(l))
+  public async listLaundries() {
+    const laundries = await getAllLaundries();
+    return laundries.map((l) =>
+      this.crypto.decryptEntity(l, Laundry_SensitiveFields)
+    );
   }
 }

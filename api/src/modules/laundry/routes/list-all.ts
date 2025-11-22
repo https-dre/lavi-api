@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { LaundryService } from "../laundry-service";
-import { LaundryType } from "@/types/typebox";
+import { TLaundryWithAverage } from "@/types/typebox";
 
 export const listLaundries = (service: LaundryService) => {
   return new Elysia().get(
@@ -14,9 +14,11 @@ export const listLaundries = (service: LaundryService) => {
         summary: "List laundries",
         tags: ["laundries"],
       },
-      body: t.Object({
-        laundries: t.Array(LaundryType),
-      }),
+      response: {
+        200: t.Object({
+          laundries: t.Array(TLaundryWithAverage),
+        }),
+      },
     }
   );
 };
