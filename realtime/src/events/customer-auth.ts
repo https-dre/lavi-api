@@ -16,6 +16,7 @@ export const addCustomerAuth = (socket: Socket) => {
       socket.data.id = response.data.payload.customerId;
       socket.join("authenticated");
       socket.join("customers");
+      socket.join(`user:${socket.data.id}`);
       socket.emit("from-server", {
         info: socket.data,
         message: "Authenticated!",
