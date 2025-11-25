@@ -10,7 +10,7 @@ services:
   realtime:
     env_file: ./realtime/.env.production
     ports:
-      - "443:${WS_PORT}"
+      - "8081:${WS_PORT}"
 
   worker:
     env_file: ./worker/.env.production
