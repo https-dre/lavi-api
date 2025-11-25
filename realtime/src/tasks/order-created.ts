@@ -1,3 +1,4 @@
+import { isUserOnline } from "@/functions/is-user-online";
 import { createCustomerNotification } from "@/infra/api/create-notification";
 import { ioServer } from "@/infra/socket.io/server";
 import type { OrderDTO } from "@/types/dtos";
@@ -13,13 +14,9 @@ export const task_orderCreated = async (data: { order: OrderDTO }) => {
     },
   };
 
-  const socketList = await ioServer.in("authenticated").fetchSockets();
-  for (const socket of socketList) {
-    if (socket.data.id == data.order.customerId) {
-      notificationData.status = "unread";
-      socket.emit("notification", notificationData);
-    }
-  }
+  ioServer
+    .in(`user:${data.order.customerId}`)
+    .emit("notification", notificationData);
 
   const createNotification = createCustomerNotification(
     data.order.customerId,

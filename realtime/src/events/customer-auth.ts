@@ -21,6 +21,14 @@ export const addCustomerAuth = (socket: Socket) => {
         info: socket.data,
         message: "Authenticated!",
       });
+      return;
     }
+    
+    socket.emit("from-server", {
+      info: {
+        authResponseStatus: response.status
+      },
+      message: "Erro na autenticação"
+    })
   });
 };
