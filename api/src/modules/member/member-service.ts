@@ -1,9 +1,6 @@
 import { BadResponse } from "@/infra/http/error-handler";
 import { MemberModel } from "@/types/models";
-import {
-  CryptoProvider,
-  JwtProvider,
-} from "@/infra/providers/crypto-provider";
+import { CryptoProvider, JwtProvider } from "@/infra/providers/crypto-provider";
 import { ILaundryRepository, IMemberRepository } from "@/types/repositories";
 import { MemberDTO } from "@/types/dtos";
 import { MemberType } from "@/types/typebox";
@@ -16,7 +13,7 @@ export class MemberService {
     readonly repository: IMemberRepository,
     readonly laundryRepository: ILaundryRepository,
     readonly jwt: JwtProvider,
-    readonly crypto: CryptoProvider,
+    readonly crypto: CryptoProvider
   ) {}
 
   private adaptModel(model: MemberModel): MemberDTO {
@@ -43,7 +40,7 @@ export class MemberService {
       throw new BadResponse("CPF já cadastrado!");
 
     const roles = data.roles.filter((role) =>
-      this.allowed_roles.includes(role),
+      this.allowed_roles.includes(role)
     );
 
     const encrypted: Omit<MemberModel, "id" | "created_at"> = {
@@ -84,14 +81,17 @@ export class MemberService {
     const passResult = this.crypto.comparePassword(password, account.password);
     if (!passResult) throw new BadResponse("E-mail ou Senha incorretos.", 401);
 
-    return this.jwt.generateToken({
-      roles: account.roles,
-      memberId: account.id,
-    });
+    return {
+      token: this.jwt.generateToken({
+        roles: account.roles,
+        memberId: account.id,
+      }),
+      member: account
+    };
   }
 
   async createOwnerMember(
-    data: Omit<MemberDTO, "id" | "created_at" | "roles">,
+    data: Omit<MemberDTO, "id" | "created_at" | "roles">
   ) {
     const dataToBeSaved = {
       ...data,
@@ -104,7 +104,7 @@ export class MemberService {
 
   async createEmployeeMember(
     data: Omit<MemberDTO, "id" | "created_at" | "roles">,
-    laundryId: string,
+    laundryId: string
   ) {
     if (!(await this.laundryRepository.findById(laundryId)))
       throw new BadResponse("Lavanderia não encontrada!", 404);

@@ -83,7 +83,7 @@ export class CustomerService {
    * @param password Normal password
    * @returns Jwt token with normal e-mail
    */
-  public async authCustomer(email: string, password: string): Promise<string> {
+  public async authCustomer(email: string, password: string) {
     const customerFounded = await this.repository.findByEmail(
       this.crypto.hmac(email)
     );
@@ -94,7 +94,10 @@ export class CustomerService {
       throw new BadResponse("Senha ou e-mail incorretos!", 401);
     }
 
-    return this.jwt.generateToken({ id: customerFounded.id });
+    return {
+      token: this.jwt.generateToken({ id: customerFounded.id }),
+      customer: this.decryptCustomer(customerFounded),
+    };
   }
 
   public async updateCustomer(id: string, fields: Record<string, any>) {
