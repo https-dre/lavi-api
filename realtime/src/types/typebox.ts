@@ -16,7 +16,7 @@ const DateString = Type.String({
   examples: ["2007-05-02"],
 });
 
-export const CustomerType = Type.Object({
+export const zCustomer = Type.Object({
   id: Type.String(),
   profile_url: Type.Union([Type.String(), Type.Null()]),
   address: Type.String(),
@@ -30,7 +30,7 @@ export const CustomerType = Type.Object({
   created_at: Type.Union([DateISO, Type.Null()]),
 });
 
-export const LaundryType = Type.Object({
+export const zLaundry = Type.Object({
   id: Type.String(),
   name: Type.String(),
   email: Type.String({ format: "email" }),
@@ -79,7 +79,7 @@ export const OrderType = Type.Object({
   customerId: Type.String(),
 });
 
-export const MemberType = Type.Object({
+export const zMember = Type.Object({
   id: Type.String({ format: "uuid" }),
   profile_url: Type.Union([Type.String(), Type.Null()]),
   name: Type.String(),
@@ -90,7 +90,7 @@ export const MemberType = Type.Object({
   created_at: Type.Union([DateISO, Type.Null()]),
 });
 
-export const CatalogItemType = Type.Object({
+export const zCatalogItem = Type.Object({
   id: Type.String({ format: "uuid" }),
   color: Type.String(),
   units: Type.Integer(),
@@ -100,7 +100,7 @@ export const CatalogItemType = Type.Object({
   laundryId: Type.String({ format: "uuid" }),
 });
 
-export const FeedbackType = Type.Object({
+export const zFeedback = Type.Object({
   id: Type.String({ format: "uuid" }),
   content: Type.String(),
   title: Type.String(),
@@ -117,7 +117,7 @@ export const FeedbackImageType = Type.Object({
   postId: Type.String({ format: "uuid" }),
 });
 
-export const NotificationType = Type.Object({
+export const zNotification = Type.Object({
   id: Type.String({ format: "uuid" }),
   type: Type.String({ maxLength: 100 }),
   metadata: Type.Union([Type.Any(), Type.Null()]),
