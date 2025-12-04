@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { FeedbackService } from "../feedback-service";
-import { FeedbackType } from "@/types/typebox";
+import { zFeedback } from "@/types/typebox";
 
 export const createFeedback = (service: FeedbackService) => {
   return new Elysia().post('/feedbacks/',
@@ -15,12 +15,12 @@ export const createFeedback = (service: FeedbackService) => {
         tags: ['feedbacks']
       },
       body: t.Object({
-        feedback: t.Omit(FeedbackType, ['id', 'created_at', 'rate']),
+        feedback: t.Omit(zFeedback, ['id', 'created_at', 'rate']),
         rate: t.Number({ maximum: 5 })
       }),
       response: {
         201: t.Object({
-          feedback_created: FeedbackType
+          feedback_created: zFeedback
         })
       }
     })

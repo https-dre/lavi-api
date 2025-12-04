@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 import { DateISO } from "./date";
 
-export const FeedbackType = Type.Object({
+export const zFeedback = Type.Object({
   id: Type.String({ format: "uuid" }),
   content: Type.String(),
   title: Type.String(),

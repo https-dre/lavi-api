@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 
-export const CatalogItemType = Type.Object({
+export const zCatalogItem = Type.Object({
   id: Type.String({ format: "uuid" }),
   color: Type.String(),
   units: Type.Integer(),

@@ -3,7 +3,7 @@ import { BadResponse } from "@/infra/http/error-handler";
 import { LaundryModel } from "@/types/models";
 import { CryptoProvider, JwtProvider } from "@/infra/providers/crypto-provider";
 import { ILaundryRepository, IMemberRepository } from "@/types/repositories";
-import { LaundryType } from "@/types/typebox";
+import { zLaundry } from "@/types/typebox";
 import _ from "lodash";
 import { generateSlug } from "@/functions/generate-slug";
 import { getAllLaundries } from "./static/list-laundries";
@@ -146,7 +146,7 @@ export class LaundryService {
   }
 
   public adaptModel(model: LaundryModel): LaundryDTO {
-    const dtoKeys = Object.keys(LaundryType.properties) as (keyof LaundryDTO)[];
+    const dtoKeys = Object.keys(zLaundry.properties) as (keyof LaundryDTO)[];
     const dto = _.pick(model, dtoKeys);
     return dto;
   }

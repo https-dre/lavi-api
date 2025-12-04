@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { MemberService } from "../member-service";
-import { MemberType } from "@/types/typebox";
+import { zMember } from "@/types/typebox";
 
 export const listMembers = (service: MemberService): Elysia => {
   return new Elysia().get(
@@ -16,7 +16,7 @@ export const listMembers = (service: MemberService): Elysia => {
       },
       response: {
         200: t.Object({
-          members: t.Array(t.Omit(MemberType, ["password"])),
+          members: t.Array(t.Omit(zMember, ["password"])),
         }),
       },
     },

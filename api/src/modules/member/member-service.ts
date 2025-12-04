@@ -3,7 +3,7 @@ import { MemberModel } from "@/types/models";
 import { CryptoProvider, JwtProvider } from "@/infra/providers/crypto-provider";
 import { ILaundryRepository, IMemberRepository } from "@/types/repositories";
 import { MemberDTO } from "@/types/dtos";
-import { MemberType } from "@/types/typebox";
+import { zMember } from "@/types/typebox";
 import _ from "lodash";
 import JWT from "jsonwebtoken";
 
@@ -17,7 +17,7 @@ export class MemberService {
   ) {}
 
   private adaptModel(model: MemberModel): MemberDTO {
-    const dtoKeys = Object.keys(MemberType.properties) as (keyof MemberDTO)[];
+    const dtoKeys = Object.keys(zMember.properties) as (keyof MemberDTO)[];
     return _.pick(model, dtoKeys);
   }
 

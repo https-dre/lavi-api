@@ -1,4 +1,4 @@
-import { MemberType } from "@/types/typebox";
+import { zMember } from "@/types/typebox";
 import { MemberService } from "../member-service";
 import Elysia, { t } from "elysia";
 
@@ -16,7 +16,7 @@ export const createOwnerMember = (service: MemberService): Elysia => {
         tags: ["members"],
       },
       body: t.Object({
-        member: t.Omit(MemberType, ["id", "created_at", "roles"]),
+        member: t.Omit(zMember, ["id", "created_at", "roles"]),
       }),
       response: {
         201: t.Object({

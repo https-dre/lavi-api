@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { CatalogItemService } from "../catalog-item.service";
-import { CatalogItemType } from "@/types/typebox";
+import { zCatalogItem } from "@/types/typebox";
 
 export const createCatalogItem = (service: CatalogItemService) => {
   return new Elysia().post(
@@ -17,14 +17,14 @@ export const createCatalogItem = (service: CatalogItemService) => {
         summary: "Create catalog item",
       },
       body: t.Object({
-        item: t.Omit(CatalogItemType, ["id", "laundryId"]),
+        item: t.Omit(zCatalogItem, ["id", "laundryId"]),
       }),
       params: t.Object({
         laundryId: t.String({ format: "uuid" }),
       }),
       response: {
         201: t.Object({
-          item: CatalogItemType,
+          item: zCatalogItem,
         }),
       },
     },

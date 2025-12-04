@@ -5,7 +5,7 @@ import { CryptoProvider, JwtProvider } from "@/infra/providers/crypto-provider";
 import { ICustomerRepository } from "@/types/repositories";
 import { IdentityService } from "@/generators/identity-service";
 import { CustomerModel } from "@/types/models";
-import { CustomerType } from "@/types/typebox";
+import { zCustomer } from "@/types/typebox";
 import _ from "lodash";
 import { S3Provider } from "@/infra/providers/S3Provider";
 import { randomUUID } from "node:crypto";
@@ -159,7 +159,7 @@ export class CustomerService {
 
   adaptModel(c: CustomerModel): CustomerDTO {
     const dtoKeys = Object.keys(
-      CustomerType.properties
+      zCustomer.properties
     ) as (keyof CustomerDTO)[];
     const dto = _.pick(c, dtoKeys);
     return dto;

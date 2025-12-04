@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 import { DateISO } from "./date";
 
-export const LaundryType = Type.Object({
+export const zLaundry = Type.Object({
   id: Type.String(),
   name: Type.String(),
   email: Type.String({ format: "email" }),
@@ -28,7 +28,7 @@ export const LaundryBannerType = Type.Object({
 });
 
 export const TLaundryWithAverage = Type.Composite([
-  LaundryType,
+  zLaundry,
   Type.Object({
     reviewsCount: Type.Number(),
     averageRating: Type.Union([Type.String(), Type.Null()]),

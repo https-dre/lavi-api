@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { CustomerService } from "../customer-service";
-import { CustomerType } from "@/types/typebox";
+import { zCustomer } from "@/types/typebox";
 
 export const authenticateCustomer = (service: CustomerService) => {
   return new Elysia().put(
@@ -22,7 +22,7 @@ export const authenticateCustomer = (service: CustomerService) => {
       response: {
         201: t.Object({
           token: t.String(),
-          customer: CustomerType
+          customer: zCustomer
         }),
       },
     },

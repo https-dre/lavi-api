@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { LaundryService } from "../laundry-service";
-import { LaundryType } from "@/types/typebox";
+import { zLaundry } from "@/types/typebox";
 
 export const updateLaundry = (service: LaundryService): Elysia => {
   return new Elysia().patch(
@@ -21,7 +21,7 @@ export const updateLaundry = (service: LaundryService): Elysia => {
       }),
       body: t.Object({
         fields: t.Partial(
-          t.Omit(LaundryType, ["id", "created_at", "putEmployeeCode"]),
+          t.Omit(zLaundry, ["id", "created_at", "putEmployeeCode"]),
         ),
       }),
     },
