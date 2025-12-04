@@ -86,7 +86,7 @@ export class MemberService {
         roles: account.roles,
         memberId: account.id,
       }),
-      member: account
+      member: this.decryptMember(account),
     };
   }
 
