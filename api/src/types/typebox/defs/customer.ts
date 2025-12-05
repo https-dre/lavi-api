@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 import { DateISO, DateString } from "./date";
 
-export const CustomerType = Type.Object({
+export const zCustomer = Type.Object({
   id: Type.String(),
   profile_url: Type.Union([Type.String(), Type.Null()]),
   address: Type.String(),

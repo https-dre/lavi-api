@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 import { DateISO } from "./date";
 
-export const NotificationType = Type.Object({
+export const zNotification = Type.Object({
   id: Type.String({ format: "uuid" }),
   type: Type.String({ maxLength: 100 }),
   metadata: Type.Union([Type.Any(), Type.Null()]),

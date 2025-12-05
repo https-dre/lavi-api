@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 import { DateISO } from "./date";
 
-export const MemberType = Type.Object({
+export const zMember = Type.Object({
   id: Type.String({ format: "uuid" }),
   profile_url: Type.Union([Type.String(), Type.Null()]),
   name: Type.String(),

@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 import { DateISO } from "./date";
 
-export const ChatType = Type.Object({
+export const zChat = Type.Object({
   id: Type.String({ format: "uuid" }),
   laundryId: Type.String({ format: "uuid" }),
   customerId: Type.String({ format: "uuid" }),

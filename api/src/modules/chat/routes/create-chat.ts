@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { ChatService } from "../chat-service";
-import { ChatType } from "@/types/typebox";
+import { zChat } from "@/types/typebox";
 
 export const createChat = (service: ChatService) => {
   return new Elysia().patch(
@@ -8,6 +8,7 @@ export const createChat = (service: ChatService) => {
     async ({ body, status }) => {
       const { chat } = body;
       const created = await service.createChat(chat);
+      console.log(created);
       return status(200, { chat: created });
     },
     {
@@ -16,7 +17,7 @@ export const createChat = (service: ChatService) => {
         tags: ["chats"],
       },
       body: t.Object({
-        chat: t.Omit(ChatType, ["id", "created_at"]),
+        chat: t.Omit(zChat, ["id", "created_at"]),
       }),
     }
   );

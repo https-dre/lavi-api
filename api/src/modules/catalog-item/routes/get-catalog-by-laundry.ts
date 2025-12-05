@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { CatalogItemService } from "../catalog-item.service";
-import { CatalogItemType } from "@/types/typebox";
+import { zCatalogItem } from "@/types/typebox";
 
 export const getCatalogByLaundry = (service: CatalogItemService): Elysia => {
   return new Elysia().get(
@@ -21,7 +21,7 @@ export const getCatalogByLaundry = (service: CatalogItemService): Elysia => {
       response: {
         200: t.Object({
           catalog: t.Object({
-            items: t.Array(CatalogItemType),
+            items: t.Array(zCatalogItem),
           }),
           laundryId: t.String({ format: "uuid" }),
         }),

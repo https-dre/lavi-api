@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { NotificationService } from "../notification-service";
-import { NotificationType } from "@/types/typebox";
+import { zNotification } from "@/types/typebox";
 
 export const getNotSentNotifications = (service: NotificationService) => {
   return new Elysia().get(
@@ -20,7 +20,7 @@ export const getNotSentNotifications = (service: NotificationService) => {
       }),
       response: {
         200: t.Object({
-          notifications: t.Array(NotificationType),
+          notifications: t.Array(zNotification),
         }),
       },
     }

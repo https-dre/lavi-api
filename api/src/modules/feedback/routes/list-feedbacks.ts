@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { FeedbackService } from "../feedback-service";
-import { FeedbackImageType, FeedbackType } from "@/types/typebox";
+import { FeedbackImageType, zFeedback } from "@/types/typebox";
 
 export const listFeedbacksByLaundry = (service: FeedbackService) => {
   return new Elysia().get(
@@ -28,7 +28,7 @@ export const listFeedbacksByLaundry = (service: FeedbackService) => {
       response: {
         200: t.Object({
           feedbacks: t.Array(t.Object({
-            feedbackPost: FeedbackType,
+            feedbackPost: zFeedback,
             feedbackImages: t.Array(FeedbackImageType),
             customerName: t.String(),
             customerProfileUrl: t.Union([t.Null(), t.String()])

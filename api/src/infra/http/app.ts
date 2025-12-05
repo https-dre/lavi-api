@@ -11,10 +11,14 @@ import { s3Api } from "./s3-api";
 import { feedbackController } from "@/modules/feedback/routes";
 import { notificationController } from "@/modules/notifications/routes";
 import { chatController } from "@/modules/chat/routes";
+import { toJSONSchema } from 'zod';
 
 export const App = new Elysia()
   .use(
     openapi({
+      mapJsonSchema: {
+        zod: toJSONSchema
+      },
       documentation: {
         info: {
           title: "Laví API - Docs",

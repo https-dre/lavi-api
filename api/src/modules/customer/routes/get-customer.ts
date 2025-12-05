@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { CustomerService } from "../customer-service";
-import { CustomerType } from "@/types/typebox";
+import { zCustomer } from "@/types/typebox";
 
 export const getCustomer = (service: CustomerService) => {
   return new Elysia().get(
@@ -21,7 +21,7 @@ export const getCustomer = (service: CustomerService) => {
       }),
       response: {
         200: t.Object({
-          customer: t.Omit(CustomerType, ["password"]),
+          customer: t.Omit(zCustomer, ["password"]),
         }),
       },
     },

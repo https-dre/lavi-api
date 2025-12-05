@@ -1,5 +1,5 @@
 import { NotificationService } from "@/modules/notifications/notification-service";
-import { NotificationType } from "@/types/typebox";
+import { zNotification } from "@/types/typebox";
 import Elysia, { t } from "elysia";
 
 export const createNotificationForMember = (service: NotificationService) => {
@@ -21,7 +21,7 @@ export const createNotificationForMember = (service: NotificationService) => {
         tags: ["members"],
       },
       body: t.Object({
-        notification: t.Omit(NotificationType, [
+        notification: t.Omit(zNotification, [
           "id",
           "created_at",
           "userType",
@@ -30,7 +30,7 @@ export const createNotificationForMember = (service: NotificationService) => {
       }),
       response: {
         201: t.Object({
-          notification_created: NotificationType,
+          notification_created: zNotification,
         }),
       },
     }

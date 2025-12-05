@@ -1,4 +1,4 @@
-import { CustomerType } from "@/types/typebox";
+import { zCustomer } from "@/types/typebox";
 import { CustomerService } from "../customer-service";
 import Elysia, { t } from "elysia";
 
@@ -18,7 +18,7 @@ export const updateCustomer = (service: CustomerService) => {
       },
       body: t.Object({
         fields: t.Partial(
-          t.Omit(CustomerType, ["password", "id", "created_at"]),
+          t.Omit(zCustomer, ["password", "id", "created_at"]),
         ),
       }),
       params: t.Object({

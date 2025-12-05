@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { LaundryService } from "../laundry-service";
-import { LaundryType } from "@/types/typebox";
+import { zLaundry } from "@/types/typebox";
 
 export const createLaundry = (service: LaundryService): Elysia => {
   return new Elysia().post(
@@ -17,7 +17,7 @@ export const createLaundry = (service: LaundryService): Elysia => {
       },
       body: t.Object({
         ownerId: t.String({ format: "uuid" }),
-        laundry: t.Omit(LaundryType, ["created_at", "id", "putEmployeeCode"]),
+        laundry: t.Omit(zLaundry, ["created_at", "id", "putEmployeeCode"]),
       }),
       response: {
         201: t.Object({

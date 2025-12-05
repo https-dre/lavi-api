@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { LaundryService } from "../laundry-service";
-import { LaundryType } from "@/types/typebox";
+import { zLaundry } from "@/types/typebox";
 
 export const searchLaundriesByName = (service: LaundryService): Elysia => {
   return new Elysia().get(
@@ -22,7 +22,7 @@ export const searchLaundriesByName = (service: LaundryService): Elysia => {
       }),
       response: {
         200: t.Object({
-          laundries: t.Array(LaundryType),
+          laundries: t.Array(zLaundry),
         }),
       },
     },

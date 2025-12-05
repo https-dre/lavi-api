@@ -1,30 +1,30 @@
 // Data Transfer Object
 import {
-  MemberType,
-  CustomerType,
-  LaundryType,
+  zMember,
+  zCustomer,
+  zLaundry,
   OrderType,
-  CatalogItemType,
-  FeedbackType,
+  zCatalogItem,
+  zFeedback,
   FeedbackImageType,
   LaundryBannerType,
-  NotificationType,
+  zNotification,
 } from "./typebox";
 
-export type CustomerDTO = typeof CustomerType.static;
+export type CustomerDTO = typeof zCustomer.static;
 
-export type LaundryDTO = typeof LaundryType.static;
+export type LaundryDTO = typeof zLaundry.static;
 
 export type LaundryBannerDTO = typeof LaundryBannerType.static;
 
 export type OrderDTO = typeof OrderType.static;
 
-export type MemberDTO = typeof MemberType.static;
+export type MemberDTO = typeof zMember.static;
 
-export type CatalogItemDTO = typeof CatalogItemType.static;
+export type CatalogItemDTO = typeof zCatalogItem.static;
 
-export type FeedbackDTO = typeof FeedbackType.static;
+export type FeedbackDTO = typeof zFeedback.static;
 
 export type FeedbackImageDTO = typeof FeedbackImageType.static;
 
-export type NotificationDTO = typeof NotificationType.static;
+export type NotificationDTO = typeof zNotification.static;

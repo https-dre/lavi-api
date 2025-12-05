@@ -84,7 +84,8 @@ const appServices = {
     chatRepository,
     customerRepository,
     laundryRepository,
-    memberRepository
+    memberRepository,
+    cryptoProvider
   ),
 };
 

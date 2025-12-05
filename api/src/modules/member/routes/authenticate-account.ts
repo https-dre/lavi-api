@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { MemberService } from "../member-service";
-import { MemberType } from "@/types/typebox";
+import { zMember } from "@/types/typebox";
 
 export const authenticateMember = (service: MemberService): Elysia => {
   return new Elysia().put(
@@ -22,7 +22,7 @@ export const authenticateMember = (service: MemberService): Elysia => {
       response: {
         201: t.Object({
           token: t.String(),
-          member: MemberType
+          member: zMember
         }),
       },
     },

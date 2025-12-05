@@ -1,6 +1,6 @@
 import Elysia, { t } from "elysia";
 import { CatalogItemService } from "../catalog-item.service";
-import { CatalogItemType } from "@/types/typebox";
+import { zCatalogItem } from "@/types/typebox";
 
 export const updateCatalogItem = (service: CatalogItemService): Elysia => {
   return new Elysia().patch(
@@ -15,7 +15,7 @@ export const updateCatalogItem = (service: CatalogItemService): Elysia => {
         itemId: t.String({ format: "uuid" }),
       }),
       body: t.Object({
-        fields: t.Partial(t.Omit(CatalogItemType, ["id", "laundryId"])),
+        fields: t.Partial(t.Omit(zCatalogItem, ["id", "laundryId"])),
       }),
     },
   );
