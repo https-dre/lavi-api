@@ -5,6 +5,7 @@ import { addNotification } from "@/events/on-system/notification";
 import { addCustomerAuth } from "@/events/customer-auth";
 import { addMemberAuth } from "@/events/member-auth";
 import { notifyAuthenticated } from "@/events/on-system/notify-authenticated";
+import { sendMessage } from "@/events/send-message";
 
 const ioServer = new Server();
 
@@ -21,6 +22,7 @@ ioServer.on("connection", async (socket) => {
   addMemberAuth(socket);
   addNotification(socket);
   notifyAuthenticated(socket);
+  sendMessage(socket);
 });
 
 export { ioServer };

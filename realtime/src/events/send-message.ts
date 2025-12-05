@@ -21,12 +21,22 @@ export const sendMessage = (socket: Socket) => {
       ...data,
       sender_type,
       status: "sent",
-      sender_id
+      sender_id,
     });
 
     if (!savedMessage) {
       return;
     }
+
+    socket.emit("message-created", {
+      content: savedMessage.content,
+      type: "message-created",
+      metadata: {
+        chatId: data.chat_id,
+      },
+      message: savedMessage,
+    });
+    
 
     if (sender_type === "customer") {
       if (chatData.memberId) {
@@ -36,6 +46,7 @@ export const sendMessage = (socket: Socket) => {
           metadata: {
             chatId: data.chat_id,
           },
+          message: savedMessage,
         });
       }
 
@@ -51,6 +62,7 @@ export const sendMessage = (socket: Socket) => {
         metadata: {
           chatId: data.chat_id,
         },
+        message: savedMessage,
       });
       ioServer.in(`laundry:${chatData.laundryId}`).emit("chat-update", {
         chatId: data.chat_id,
