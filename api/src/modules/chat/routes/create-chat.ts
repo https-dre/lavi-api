@@ -8,6 +8,7 @@ export const createChat = (service: ChatService) => {
     async ({ body, status }) => {
       const { chat } = body;
       const created = await service.createChat(chat);
+      console.log(created);
       return status(200, { chat: created });
     },
     {
