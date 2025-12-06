@@ -9,7 +9,7 @@ export const updateLaundry = (service: LaundryService): Elysia => {
       const { id } = params;
       const { fields } = body;
       await service.updateLaundryFields(id, fields);
-      return status(200);
+      return status(200, { details: "Lavanderia atualizada" });
     },
     {
       detail: {
@@ -21,9 +21,9 @@ export const updateLaundry = (service: LaundryService): Elysia => {
       }),
       body: t.Object({
         fields: t.Partial(
-          t.Omit(zLaundry, ["id", "created_at", "putEmployeeCode"]),
+          t.Omit(zLaundry, ["id", "created_at", "putEmployeeCode"])
         ),
       }),
-    },
+    }
   );
 };
